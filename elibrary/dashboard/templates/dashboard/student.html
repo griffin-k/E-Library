@@ -76,7 +76,7 @@
   <form action="#" method="GET" class="mt-12">
     <div class="mx-auto relative bg-white max-w-3xl flex items-center border py-2 px-3 rounded-full shadow-2xl">
       <input id="search-bar" name="search_text" placeholder="Search books, authors, or topics..." class="px-5 py-2 w-full rounded-full flex-1 outline-none border-none bg-transparent focus:ring-0" />
-      <button class="px-6 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors">Search</button>
+      <button class="px-6 py-2 bg-red-600 text-white rounded-full hover:bg-red-800 transition-colors">Search</button>
     </div>
   </form>
 </div>
@@ -85,10 +85,13 @@
 <div class="container mx-auto px-5 my-5">
   <div class="bg-indigo-100 p-4 rounded-lg flex items-center justify-between">
     <div>
-      <span class="text-indigo-800 font-semibold">Real-Time Update:</span>
+      <span class="text-red-800 font-semibold">Real-Time Update:</span>
       <span class="ml-2">New books added today: <span class="real-time-update font-bold">15</span></span>
     </div>
-    <button class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">View New Arrivals</button>
+    <a href="dashboard/newarivals/" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+        View New Arrivals
+    </a>
+    <!-- <button class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">View New Arrivals</button> -->
   </div>
 </div>
 
@@ -189,19 +192,19 @@
       <img src="https://images.unsplash.com/photo-1592496431122-2349e0fbc666?q=80&w=2712&auto=format&fit=crop" alt="Book 1" class="rounded-lg mb-3">
       <h3 class="font-semibold">Deep Work</h3>
       <p class="text-gray-600">Cal Newport</p>
-      <p class="text-sm text-green-600">Added: Mar 08, 2025</p>
+      <p class="text-sm text-red-600">Added: Mar 08, 2025</p>
     </div>
     <div class="book-card bg-white shadow-lg p-5">
       <img src="https://images.unsplash.com/photo-1592496431122-2349e0fbc666?q=80&w=2712&auto=format&fit=crop" alt="Book 2" class="rounded-lg mb-3">
       <h3 class="font-semibold">The 5 AM Club</h3>
       <p class="text-gray-600">Robin Sharma</p>
-      <p class="text-sm text-green-600">Added: Mar 07, 2025</p>
+      <p class="text-sm text-red-600">Added: Mar 07, 2025</p>
     </div>
     <div class="book-card bg-white shadow-lg p-5">
       <img src="https://images.unsplash.com/photo-1592496431122-2349e0fbc666?q=80&w=2712&auto=format&fit=crop" alt="Book 3" class="rounded-lg mb-3">
       <h3 class="font-semibold">Educated</h3>
       <p class="text-gray-600">Tara Westover</p>
-      <p class="text-sm text-green-600">Added: Mar 06, 2025</p>
+      <p class="text-sm text-red-600">Added: Mar 06, 2025</p>
     </div>
   </div>
 </div>

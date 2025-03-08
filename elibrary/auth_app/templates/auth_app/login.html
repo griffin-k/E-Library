@@ -5,29 +5,104 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
 <body class="flex items-center justify-center min-h-screen bg-gray-100">
 
     <div class="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
         <h2 class="text-2xl font-semibold text-red-600 text-center">Login</h2>
+
+        <!-- Toggle for Student & Faculty -->
+        <div class="flex justify-center space-x-4 my-4">
+            <button id="studentBtn" class="px-4 py-2 bg-red-600 text-white rounded-md">Student</button>
+            <button id="facultyBtn" class="px-4 py-2 bg-gray-300 text-black rounded-md">Faculty</button>
+        </div>
+
         <form action="#" method="POST" class="mt-4">
             {% csrf_token %}
-            <div>
-                <label class="block text-gray-700">Email</label>
-                <input type="email" name="email" class="w-full px-4 py-2 mt-1 border rounded-md focus:ring-red-500 focus:border-red-500">
+
+            <!-- Student ID Field -->
+            <div id="studentIDField" class="mt-2">
+                <label class="block text-gray-700">Student ID</label>
+                <input type="text" name="student_id" class="w-full px-4 py-2 mt-1 border rounded-md focus:ring-red-500 focus:border-red-500">
             </div>
+
+            <!-- Faculty ID Field (Hidden by Default) -->
+            <div id="facultyIDField" class="mt-2 hidden">
+                <label class="block text-gray-700">Faculty ID</label>
+                <input type="text" name="faculty_id" class="w-full px-4 py-2 mt-1 border rounded-md focus:ring-red-500 focus:border-red-500">
+            </div>
+
+            <!-- Email Field -->
             <div class="mt-4">
-                <label class="block text-gray-700">Password</label>
-                <input type="password" name="password" class="w-full px-4 py-2 mt-1 border rounded-md focus:ring-red-500 focus:border-red-500">
+                <label class="block text-gray-700">Email</label>
+                <input type="email" name="email" id="email" class="w-full px-4 py-2 mt-1 border rounded-md focus:ring-red-500 focus:border-red-500" placeholder="example@lgu.edu.pk" required>
+                <p id="emailError" class="text-red-500 text-sm hidden">Email must end with @lgu.edu.pk</p>
             </div>
+
+            <!-- Password Field with Show/Hide Toggle -->
+            <div class="mt-4 relative">
+                <label class="block text-gray-700">Password</label>
+                <input type="password" id="password" name="password" class="w-full px-4 py-2 mt-1 border rounded-md focus:ring-red-500 focus:border-red-500">
+                <i id="togglePassword" class="ph ph-eye absolute right-3 top-9 text-gray-500 cursor-pointer"></i>
+            </div>
+
             <button class="w-full mt-4 px-4 py-2 text-white bg-red-600 rounded-md hover:bg-red-700">
                 Login
             </button>
         </form>
+
         <p class="mt-4 text-center text-gray-600">
             Don't have an account? <a href="{% url 'register' %}" class="text-red-600 hover:underline">Register</a>
         </p>
     </div>
+
+    <script>
+        // Email validation (Only @lgu.edu.pk)
+        document.getElementById("email").addEventListener("input", function () {
+            const emailError = document.getElementById("emailError");
+            if (!this.value.endsWith("@lgu.edu.pk")) {
+                emailError.classList.remove("hidden");
+            } else {
+                emailError.classList.add("hidden");
+            }
+        });
+
+        // Password Show/Hide Toggle
+        document.getElementById("togglePassword").addEventListener("click", function () {
+            const passwordInput = document.getElementById("password");
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                this.classList.replace("ph-eye", "ph-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                this.classList.replace("ph-eye-slash", "ph-eye");
+            }
+        });
+
+        // Toggle Student & Faculty (Show/Hide ID fields)
+        document.getElementById("studentBtn").addEventListener("click", function () {
+            this.classList.add("bg-red-600", "text-white");
+            this.classList.remove("bg-gray-300", "text-black");
+
+            document.getElementById("facultyBtn").classList.remove("bg-red-600", "text-white");
+            document.getElementById("facultyBtn").classList.add("bg-gray-300", "text-black");
+
+            document.getElementById("studentIDField").classList.remove("hidden");
+            document.getElementById("facultyIDField").classList.add("hidden");
+        });
+
+        document.getElementById("facultyBtn").addEventListener("click", function () {
+            this.classList.add("bg-red-600", "text-white");
+            this.classList.remove("bg-gray-300", "text-black");
+
+            document.getElementById("studentBtn").classList.remove("bg-red-600", "text-white");
+            document.getElementById("studentBtn").classList.add("bg-gray-300", "text-black");
+
+            document.getElementById("facultyIDField").classList.remove("hidden");
+            document.getElementById("studentIDField").classList.add("hidden");
+        });
+    </script>
 
 </body>
 </html>
