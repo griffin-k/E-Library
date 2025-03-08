@@ -7,3 +7,7 @@ def student_page(request):
 
 def newArivals(request):
     return render(request, "dashboard/newArivals.html")
+
+
+def byCategory(request):
+    return render(request, "dashboard/byCategory.html")

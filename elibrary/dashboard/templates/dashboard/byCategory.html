@@ -1,0 +1,107 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}E-Library Search{% endblock %}
+
+{% block content %}
+<div class="bg-white shadow-lg rounded-2xl p-8">
+    <h2 class="text-3xl font-bold text-red-600 mb-6 text-center">📚 Search for a Book</h2>
+    <p class="text-gray-600 text-center mb-8">Find books by title, author, or genre.</p>
+
+    <div class="mb-6 text-center">
+        <input type="text" id="searchInput" placeholder="Search for a book..." 
+               class="w-3/4 p-3 border border-gray-300 rounded-lg shadow-md">
+    </div>
+
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200">
+            <thead>
+                <tr class="bg-red-600 text-white text-lg">
+                    <th class="p-4 text-center">Title</th>
+                    <th class="p-4 text-center">Author</th>
+                    <th class="p-4 text-center">Genre</th>
+                    <th class="p-4 text-center">Year</th>
+                    <th class="p-4 text-center">Edition</th>
+                    <th class="p-4 text-center">Download</th>
+                </tr>
+            </thead>
+            <tbody id="bookList" class="divide-y divide-gray-200">
+                <tr class="hover:bg-gray-100 transition-all">
+                    <td class="p-4 text-center font-semibold text-gray-800">The Great Gatsby</td>
+                    <td class="p-4 text-center text-gray-700">F. Scott Fitzgerald</td>
+                    <td class="p-4 text-center text-gray-700">Classic Fiction</td>
+                    <td class="p-4 text-center text-gray-700">1925</td>
+                    <td class="p-4 text-center text-gray-700">1st Edition</td>
+                    <td class="p-4 text-center">
+                        <a href="https://example.com/gatsby.pdf" download 
+                           class="bg-red-600 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 transition-all">
+                            ⬇ Download
+                        </a>
+                    </td>
+                </tr>
+                <tr class="bg-gray-50 hover:bg-gray-100 transition-all">
+                    <td class="p-4 text-center font-semibold text-gray-800">1984</td>
+                    <td class="p-4 text-center text-gray-700">George Orwell</td>
+                    <td class="p-4 text-center text-gray-700">Dystopian</td>
+                    <td class="p-4 text-center text-gray-700">1949</td>
+                    <td class="p-4 text-center text-gray-700">2nd Edition</td>
+                    <td class="p-4 text-center">
+                        <a href="https://example.com/1984.pdf" download 
+                           class="bg-red-600 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 transition-all">
+                            ⬇ Download
+                        </a>
+                    </td>
+                </tr>
+                <tr class="hover:bg-gray-100 transition-all">
+                    <td class="p-4 text-center font-semibold text-gray-800">To Kill a Mockingbird</td>
+                    <td class="p-4 text-center text-gray-700">Harper Lee</td>
+                    <td class="p-4 text-center text-gray-700">Historical Fiction</td>
+                    <td class="p-4 text-center text-gray-700">1960</td>
+                    <td class="p-4 text-center text-gray-700">3rd Edition</td>
+                    <td class="p-4 text-center">
+                        <a href="https://example.com/mockingbird.pdf" download 
+                           class="bg-red-600 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 transition-all">
+                            ⬇ Download
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-6 flex justify-center space-x-2">
+        <button class="bg-red-600 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 transition-all" onclick="changePage(-1)">Previous</button>
+        <span id="pageNumber" class="px-4 py-2 font-semibold text-gray-800">1</span>
+        <button class="bg-red-600 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 transition-all" onclick="changePage(1)">Next</button>
+    </div>
+</div>
+
+<script>
+    document.getElementById("searchInput").addEventListener("keyup", function() {
+        let filter = this.value.toLowerCase();
+        let rows = document.querySelectorAll("#bookList tr");
+        
+        rows.forEach(row => {
+            let text = row.innerText.toLowerCase();
+            row.style.display = text.includes(filter) ? "" : "none";
+        });
+    });
+
+    let currentPage = 1;
+    const rowsPerPage = 2;
+    function paginate() {
+        let rows = document.querySelectorAll("#bookList tr");
+        rows.forEach((row, index) => {
+            row.style.display = (index >= (currentPage - 1) * rowsPerPage && index < currentPage * rowsPerPage) ? "" : "none";
+        });
+        document.getElementById("pageNumber").innerText = currentPage;
+    }
+    function changePage(step) {
+        let rows = document.querySelectorAll("#bookList tr").length;
+        let maxPage = Math.ceil(rows / rowsPerPage);
+        currentPage = Math.max(1, Math.min(currentPage + step, maxPage));
+        paginate();
+    }
+    paginate();
+</script>
+
+{% endblock %}

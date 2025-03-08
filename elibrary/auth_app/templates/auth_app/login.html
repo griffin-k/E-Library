@@ -12,25 +12,32 @@
     <div class="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
         <h2 class="text-2xl font-semibold text-red-600 text-center">Login</h2>
 
-        <!-- Toggle for Student & Faculty -->
+        <!-- Toggle for Student, Faculty & Staff -->
         <div class="flex justify-center space-x-4 my-4">
             <button id="studentBtn" class="px-4 py-2 bg-red-600 text-white rounded-md">Student</button>
             <button id="facultyBtn" class="px-4 py-2 bg-gray-300 text-black rounded-md">Faculty</button>
+            <button id="staffBtn" class="px-4 py-2 bg-gray-300 text-black rounded-md">Staff</button>
         </div>
 
         <form action="#" method="POST" class="mt-4">
             {% csrf_token %}
 
-            <!-- Student ID Field -->
+            <!-- Student ID Field (Default) -->
             <div id="studentIDField" class="mt-2">
                 <label class="block text-gray-700">Student ID</label>
                 <input type="text" name="student_id" class="w-full px-4 py-2 mt-1 border rounded-md focus:ring-red-500 focus:border-red-500">
             </div>
 
-            <!-- Faculty ID Field (Hidden by Default) -->
+            <!-- Faculty ID Field (Hidden Initially) -->
             <div id="facultyIDField" class="mt-2 hidden">
                 <label class="block text-gray-700">Faculty ID</label>
                 <input type="text" name="faculty_id" class="w-full px-4 py-2 mt-1 border rounded-md focus:ring-red-500 focus:border-red-500">
+            </div>
+
+            <!-- Username Field (Only for Staff) -->
+            <div id="staffUsernameField" class="mt-2 hidden">
+                <label class="block text-gray-700">Username</label>
+                <input type="text" name="username" class="w-full px-4 py-2 mt-1 border rounded-md focus:ring-red-500 focus:border-red-500">
             </div>
 
             <!-- Email Field -->
@@ -80,27 +87,42 @@
             }
         });
 
-        // Toggle Student & Faculty (Show/Hide ID fields)
-        document.getElementById("studentBtn").addEventListener("click", function () {
-            this.classList.add("bg-red-600", "text-white");
-            this.classList.remove("bg-gray-300", "text-black");
-
-            document.getElementById("facultyBtn").classList.remove("bg-red-600", "text-white");
-            document.getElementById("facultyBtn").classList.add("bg-gray-300", "text-black");
-
-            document.getElementById("studentIDField").classList.remove("hidden");
+        // Toggle logic for Student, Faculty & Staff
+        function toggleLogin(userType) {
+            document.getElementById("studentIDField").classList.add("hidden");
             document.getElementById("facultyIDField").classList.add("hidden");
+            document.getElementById("staffUsernameField").classList.add("hidden");
+
+            document.getElementById("studentBtn").classList.remove("bg-red-600", "text-white");
+            document.getElementById("facultyBtn").classList.remove("bg-red-600", "text-white");
+            document.getElementById("staffBtn").classList.remove("bg-red-600", "text-white");
+
+            document.getElementById("studentBtn").classList.add("bg-gray-300", "text-black");
+            document.getElementById("facultyBtn").classList.add("bg-gray-300", "text-black");
+            document.getElementById("staffBtn").classList.add("bg-gray-300", "text-black");
+
+            document.getElementById(userType + "Btn").classList.add("bg-red-600", "text-white");
+            document.getElementById(userType + "Btn").classList.remove("bg-gray-300", "text-black");
+
+            if (userType === "student") {
+                document.getElementById("studentIDField").classList.remove("hidden");
+            } else if (userType === "faculty") {
+                document.getElementById("facultyIDField").classList.remove("hidden");
+            } else if (userType === "staff") {
+                document.getElementById("staffUsernameField").classList.remove("hidden");
+            }
+        }
+
+        document.getElementById("studentBtn").addEventListener("click", function () {
+            toggleLogin("student");
         });
 
         document.getElementById("facultyBtn").addEventListener("click", function () {
-            this.classList.add("bg-red-600", "text-white");
-            this.classList.remove("bg-gray-300", "text-black");
+            toggleLogin("faculty");
+        });
 
-            document.getElementById("studentBtn").classList.remove("bg-red-600", "text-white");
-            document.getElementById("studentBtn").classList.add("bg-gray-300", "text-black");
-
-            document.getElementById("facultyIDField").classList.remove("hidden");
-            document.getElementById("studentIDField").classList.add("hidden");
+        document.getElementById("staffBtn").addEventListener("click", function () {
+            toggleLogin("staff");
         });
     </script>
 
