@@ -6,6 +6,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("auth/", include("auth_app.urls")), 
     path("dashboard/", include("dashboard.urls")),
+    path("librarian/", include("librarian_app.urls")),
 
     path("", student_page, name="student_page"),
 ]

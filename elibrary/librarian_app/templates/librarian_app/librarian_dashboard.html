@@ -1,0 +1,100 @@
+{% extends 'librarian_app/base.html' %}
+
+{% block title %}Librarian Dashboard{% endblock %}
+
+{% block content %}
+
+{% load static %}
+<div class="fixed top-20 left-80 right-5 bottom-5 overflow-y-auto bg-white p-6 rounded-lg shadow-lg border border-gray-200">
+
+    <!-- Dashboard Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-center mb-10">
+        <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+            <img src="{% static 'images/books.png' %}" alt="Total Books" class="mx-auto mb-3 h-12 w-12">
+            <h3 class="text-lg font-semibold text-gray-700">Total Books</h3>
+            <p class="text-3xl font-bold text-gray-500">2,450</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+            <img src="{% static 'images/member.png' %}" alt="Members" class="mx-auto mb-3 h-12 w-12">
+            <h3 class="text-lg font-semibold text-gray-700">Members</h3>
+            <p class="text-3xl font-bold text-gray-500">1,220</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+            <img src="{% static 'images/faculty.png' %}" alt="Faculty" class="mx-auto mb-3 h-12 w-12">
+            <h3 class="text-lg font-semibold text-gray-700">Faculty</h3>
+            <p class="text-3xl font-bold text-gray-500">85</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+            <img src="{% static 'images/download.png' %}" alt="Downloads" class="mx-auto mb-3 h-12 w-12">
+            <h3 class="text-lg font-semibold text-gray-700">Downloads</h3>
+            <p class="text-3xl font-bold text-gray-500">678</p>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Doughnut Chart -->
+        <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200 flex flex-col">
+            <h3 class="text-lg font-semibold text-gray-700 mb-4 text-center">Book Categories</h3>
+            <div class="flex-grow">
+                <canvas id="bookChart" class="w-full h-72"></canvas>
+            </div>
+        </div>
+        <!-- Bar Chart -->
+        <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200 flex flex-col">
+            <h3 class="text-lg font-semibold text-gray-700 mb-4 text-center">Download Books Progress</h3>
+            <div class="flex-grow">
+                <canvas id="issuedBooksChart" class="w-full h-72"></canvas>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Doughnut Chart for Book Categories
+    const bookCtx = document.getElementById('bookChart').getContext('2d');
+    new Chart(bookCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Fiction', 'Science', 'History', 'Technology', 'Others'],
+            datasets: [{
+                data: [500, 300, 400, 350, 900],
+                backgroundColor: ['#1E3A8A', '#16A34A', '#EAB308', '#DC2626', '#6B7280'],
+                hoverOffset: 10
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            responsive: true
+        }
+    });
+
+    // Bar Chart for Issued Books
+    const issuedBooksCtx = document.getElementById('issuedBooksChart').getContext('2d');
+    new Chart(issuedBooksCtx, {
+        type: 'bar',
+        data: {
+            labels: ['January', 'February', 'March', 'April', 'May'],
+            datasets: [{
+                label: 'Issued Books',
+                data: [120, 150, 180, 200, 220],
+                backgroundColor: '#3B82F6'
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 250
+                }
+            }
+        }
+    });
+</script>
+
+{% endblock %}

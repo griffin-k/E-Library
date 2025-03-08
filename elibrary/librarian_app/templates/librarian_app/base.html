@@ -1,0 +1,99 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Librarian Panel{% endblock %}</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body class="bg-gray-200">
+
+    <!-- Header -->
+    <header class="bg-gray-500 text-white py-4 px-6 shadow-md fixed top-0 left-0 w-full z-50 flex justify-between items-center rounded-b-[30px]">
+        <div class="flex items-center">
+            <h1 class="text-2xl font-semibold"><i class="fa-solid fa-book-open mr-2"></i>Librarian Dashboard</h1>
+        </div>
+        <a href="/auth/logout" class="bg-gray-600 px-5 py-2 rounded-lg shadow hover:bg-gray-700 transition flex items-center">
+            <i class="fa-solid fa-sign-out-alt mr-2"></i> Logout
+        </a>
+    </header>
+    
+    <!-- Sidebar & Content Wrapper -->
+    <div class="flex mt-20"> 
+        <!-- Floating Sidebar (Positioned Below Header) -->
+        <aside class="bg-gray-500 text-white shadow-lg h-[85vh] w-64 p-6 rounded-xl flex flex-col justify-between fixed left-4 top-24 z-40">
+            <div>
+                <ul class="space-y-3">
+                    <li>
+                        <a href="/dashboard" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-700 transition">
+                            <i class="fa-solid fa-house text-white"></i>
+                            <span class="ml-3">Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/dashboard/books" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-700 transition">
+                            <i class="fa-solid fa-book text-white"></i>
+                            <span class="ml-3">Manage Books</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/dashboard/members" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-700 transition">
+                            <i class="fa-solid fa-users text-white"></i>
+                            <span class="ml-3">Manage Members</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/dashboard/issue-book" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-700 transition">
+                            <i class="fa-solid fa-handshake text-white"></i>
+                            <span class="ml-3">Issue Books</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/dashboard/clearance" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-700 transition">
+                            <i class="fa-solid fa-check text-white"></i>
+                            <span class="ml-3">Clearance</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="space-y-3">
+                <ul class="space-y-3">
+                    <li>
+                        <a href="/dashboard/setting" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-700 transition">
+                            <i class="fa-solid fa-cog text-white"></i>
+                            <span class="ml-3">Settings</span>
+                        </a>
+                    </li>
+                    <hr class="h-1 bg-gray-300 rounded-full shadow-md border-none my-6">
+                    <li>
+                        <a href="/auth/logout" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-700 transition">
+                            <i class="fa-solid fa-sign-out-alt text-white"></i>
+                            <span class="ml-3">Logout</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-700 transition">
+                            <i class="fa-solid fa-life-ring text-white"></i>
+                            <span class="ml-3">Support Desk</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="ml-80 p-8 w-[calc(100%-320px)] h-[calc(100vh-4rem)] overflow-auto fixed right-0 top-16">
+            <div class="bg-white p-8 rounded-xl shadow-md">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+
+</body>
+</html>
