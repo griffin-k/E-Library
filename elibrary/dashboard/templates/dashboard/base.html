@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Dashboard{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+    <nav class="bg-white shadow-md">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-red-600 text-2xl font-bold">📚 E-Library</a>
+
+            <div class="hidden md:flex space-x-6">
+                <a href="#" class="text-gray-700 hover:text-red-600 font-medium">Home</a>
+                <a href="{% url 'student_page' %}" class="text-gray-700 hover:text-red-600 font-medium">Students</a>
+                <a href="#" class="text-gray-700 hover:text-red-600 font-medium">Courses</a>
+            </div>
+
+            <div class="hidden md:flex space-x-4">
+                <a href="{% url 'login' %}" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">Login</a>
+                <a href="{% url 'register' %}" class="px-4 py-2 border border-red-600 text-red-600 rounded-lg hover:bg-red-600 hover:text-white">Register</a>
+            </div>
+
+            <button id="menu-btn" class="md:hidden focus:outline-none">
+                <svg class="w-8 h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden flex flex-col space-y-2 px-6 py-4 bg-white">
+            <a href="#" class="py-2 px-4 text-gray-700 hover:text-red-600">Home</a>
+            <a href="{% url 'student_page' %}" class="py-2 px-4 text-gray-700 hover:text-red-600">Students</a>
+            <a href="#" class="py-2 px-4 text-gray-700 hover:text-red-600">Courses</a>
+            <a href="{% url 'login' %}" class="py-2 px-4 text-white bg-red-600 rounded-lg hover:bg-red-700">Login</a>
+            <a href="{% url 'register' %}" class="py-2 px-4 border border-red-600 text-red-600 rounded-lg hover:bg-red-600 hover:text-white">Register</a>
+        </div>
+    </nav>
+
+    <div class="container mx-auto mt-10 px-6">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script>
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+    </script>
+
+</body>
+</html>

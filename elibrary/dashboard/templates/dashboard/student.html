@@ -1,0 +1,268 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}E-Library Portal{% endblock %}
+
+{% block content %}
+
+<style>
+  .carousel {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+  }
+
+  .carousel-inner {
+    display: flex;
+    transition: transform 0.5s linear;
+    will-change: transform;
+  }
+
+  .carousel-item {
+    min-width: 30%;
+    box-sizing: border-box;
+    text-align: center;
+    padding: 20px;
+  }
+
+  /* Remove transition when resetting */
+  .no-transition {
+    transition: none !important;
+  }
+
+
+  .book-card {
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    overflow: hidden;
+
+  }
+
+  .book-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  .category-card {
+    transition: all 0.3s ease;
+    padding: 20px;
+    background-color: white;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .category-card:hover {
+    transform: scale(1.05);
+    background-color: #f8f9fa;
+  }
+
+  .real-time-update {
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+</style>
+
+<!-- Hero Section with Animated Background -->
+<div class="p-2 h-80 bg-image rounded-lg mx-3 my-5 relative overflow-hidden" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(https://plus.unsplash.com/premium_photo-1682284548106-3e589faff54f?q=80&w=2670&auto=format&fit=crop)">
+  <div class="text-center mt-8">
+    <h1 class="text-white text-4xl font-bold animate-fadeIn">Welcome to Your E-Library</h1>
+    <p class="text-white text-xl mt-2">Discover, Read, and Grow</p>
+  </div>
+  <form action="#" method="GET" class="mt-12">
+    <div class="mx-auto relative bg-white max-w-3xl flex items-center border py-2 px-3 rounded-full shadow-2xl">
+      <input id="search-bar" name="search_text" placeholder="Search books, authors, or topics..." class="px-5 py-2 w-full rounded-full flex-1 outline-none border-none bg-transparent focus:ring-0" />
+      <button class="px-6 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors">Search</button>
+    </div>
+  </form>
+</div>
+
+<!-- Real-Time Book Updates Banner -->
+<div class="container mx-auto px-5 my-5">
+  <div class="bg-indigo-100 p-4 rounded-lg flex items-center justify-between">
+    <div>
+      <span class="text-indigo-800 font-semibold">Real-Time Update:</span>
+      <span class="ml-2">New books added today: <span class="real-time-update font-bold">15</span></span>
+    </div>
+    <button class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">View New Arrivals</button>
+  </div>
+</div>
+
+<!-- Category Section with Icons -->
+<div class="container mx-auto px-5 my-10">
+  <h2 class="text-2xl font-bold mb-6 text-center">Explore by Category</h2>
+  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
+    <div class="category-card">📖 Fiction</div>
+    <div class="category-card">🔬 Science</div>
+    <div class="category-card">🏛️ History</div>
+    <div class="category-card">💼 Business</div>
+    <div class="category-card">🎨 Art & Design</div>
+    <div class="category-card">📚 Literature</div>
+    <div class="category-card">🔍 Research</div>
+    <div class="category-card">🚀 Technology</div>
+    <div class="category-card">🧠 Self-Help</div>
+    <div class="category-card">🌍 Travel</div>
+  </div>
+</div>
+
+<!-- Featured Books Carousel -->
+<div class="carousel">
+
+    <div class="carousel-inner">
+        <!-- Carousel Item 1 -->
+        <div class="carousel-item book-card">
+          <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f" alt="Book 1" style="width:100%; height:auto;">
+        </div>
+        <!-- Carousel Item 2 -->
+        <div class="carousel-item book-card">
+          <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f" alt="Book 2" style="width:100%; height:auto;">
+        </div>
+        <!-- Carousel Item 3 -->
+        <div class="carousel-item book-card">
+          <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794" alt="Book 3" style="width:100%; height:auto;">
+        </div>
+        <!-- Carousel Item 4 -->
+        <div class="carousel-item book-card">
+          <img src="https://images.unsplash.com/photo-1516979187457-637abb4f9353" alt="Book 4" style="width:100%; height:auto;">
+        </div>
+        <!-- Carousel Item 5 -->
+        <div class="carousel-item book-card">
+          <img src="https://images.unsplash.com/photo-1528207776546-365bb710ee93"  alt="Book 5" style="width:100%; height:auto;">
+        </div>
+        <!-- Carousel Item 6 -->
+        <div class="carousel-item book-card">
+          <img src="https://images.unsplash.com/photo-1516979187457-637abb4f9353" alt="Book 6" style="width:100%; height:auto;">
+        </div>
+        <!-- Carousel Item 7 -->
+        <div class="carousel-item book-card">
+          <img src="https://images.unsplash.com/photo-1528207776546-365bb710ee93" alt="Book 7" style="width:100%; height:auto;">
+        </div>
+        <!-- Duplicate items for seamless looping -->
+        <div class="carousel-item book-card">
+          <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f"alt="Book 1" style="width:100%; height:auto;">
+        </div>
+        <div class="carousel-item book-card">
+          <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f" alt="Book 2" style="width:100%; height:auto;">
+        </div>
+        <div class="carousel-item book-card">
+          <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794" alt="Book 3" style="width:100%; height:auto;">
+        </div>
+      </div>
+      
+
+<!-- Trending Books Section -->
+<div class="container mx-auto px-5 my-10">
+  <h2 class="text-2xl font-bold mb-6 text-center">Trending Now</h2>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+    <div class="book-card bg-white shadow-lg p-4">
+      <img src="https://images.unsplash.com/photo-1592496431122-2349e0fbc666?q=80&w=2712&auto=format&fit=crop" alt="Trending 1" class="rounded-lg mb-3">
+      <h3 class="font-semibold">The Alchemist</h3>
+      <p class="text-gray-600">Paulo Coelho</p>
+    </div>
+    <div class="book-card bg-white shadow-lg p-4">
+      <img src="https://images.unsplash.com/photo-1592496431122-2349e0fbc666?q=80&w=2712&auto=format&fit=crop" alt="Trending 2" class="rounded-lg mb-3">
+      <h3 class="font-semibold">Becoming</h3>
+      <p class="text-gray-600">Michelle Obama</p>
+    </div>
+    <div class="book-card bg-white shadow-lg p-4">
+        <img src="https://images.unsplash.com/photo-1592496431122-2349e0fbc666?q=80&w=2712&auto=format&fit=crop" alt="Trending 1" class="rounded-lg mb-3">
+      <h3 class="font-semibold">Dune</h3>
+      <p class="text-gray-600">Frank Herbert</p>
+    </div>
+    <div class="book-card bg-white shadow-lg p-4">
+        <img src="https://images.unsplash.com/photo-1592496431122-2349e0fbc666?q=80&w=2712&auto=format&fit=crop" alt="Trending 1" class="rounded-lg mb-3">
+      <h3 class="font-semibold">1984</h3>
+      <p class="text-gray-600">George Orwell</p>
+    </div>
+  </div>
+</div>
+
+<!-- Recently Added Books -->
+<div class="container mx-auto px-5 my-10">
+  <h2 class="text-2xl font-bold mb-6 text-center">Recently Added</h2>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+    <div class="book-card bg-white shadow-lg p-5">
+      <img src="https://images.unsplash.com/photo-1592496431122-2349e0fbc666?q=80&w=2712&auto=format&fit=crop" alt="Book 1" class="rounded-lg mb-3">
+      <h3 class="font-semibold">Deep Work</h3>
+      <p class="text-gray-600">Cal Newport</p>
+      <p class="text-sm text-green-600">Added: Mar 08, 2025</p>
+    </div>
+    <div class="book-card bg-white shadow-lg p-5">
+      <img src="https://images.unsplash.com/photo-1592496431122-2349e0fbc666?q=80&w=2712&auto=format&fit=crop" alt="Book 2" class="rounded-lg mb-3">
+      <h3 class="font-semibold">The 5 AM Club</h3>
+      <p class="text-gray-600">Robin Sharma</p>
+      <p class="text-sm text-green-600">Added: Mar 07, 2025</p>
+    </div>
+    <div class="book-card bg-white shadow-lg p-5">
+      <img src="https://images.unsplash.com/photo-1592496431122-2349e0fbc666?q=80&w=2712&auto=format&fit=crop" alt="Book 3" class="rounded-lg mb-3">
+      <h3 class="font-semibold">Educated</h3>
+      <p class="text-gray-600">Tara Westover</p>
+      <p class="text-sm text-green-600">Added: Mar 06, 2025</p>
+    </div>
+  </div>
+</div>
+
+<!-- Testimonials Section -->
+<div class="container mx-auto px-5 my-10 bg-gray-50 py-10 rounded-lg">
+  <h2 class="text-2xl font-bold mb-6 text-center">What Our Readers Say</h2>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="bg-white p-6 rounded-lg shadow">
+      <p class="text-gray-600">"This e-library has transformed my reading habits!"</p>
+      <p class="mt-3 font-semibold">Sarah K.</p>
+    </div>
+    <div class="bg-white p-6 rounded-lg shadow">
+      <p class="text-gray-600">"So many great books in one place. Love the variety!"</p>
+      <p class="mt-3 font-semibold">James L.</p>
+    </div>
+    <div class="bg-white p-6 rounded-lg shadow">
+      <p class="text-gray-600">"The search feature makes finding books a breeze."</p>
+      <p class="mt-3 font-semibold">Emily R.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="bg-gray-800 text-white mt-10 py-6">
+  <div class="container mx-auto px-5 text-center">
+    <p class="text-sm">© 2025 E-Library Portal. All rights reserved.</p>
+    <div class="mt-3">
+      <a href="#" class="text-gray-400 hover:text-white mx-2">About</a>
+      <a href="#" class="text-gray-400 hover:text-white mx-2">Contact</a>
+      <a href="#" class="text-gray-400 hover:text-white mx-2">Privacy Policy</a>
+    </div>
+  </div>
+</div>
+
+<script>
+let index = 0;
+  const carousel = document.querySelector(".carousel-inner");
+  const items = document.querySelectorAll(".carousel-item");
+  const totalItems = items.length / 2; // Half because of duplication
+  const itemWidth = items[0].offsetWidth;
+  let interval;
+
+  function moveCarousel() {
+    index++;
+    if (index >= totalItems) {
+      setTimeout(() => {
+        carousel.classList.add("no-transition");
+        index = 0;
+        carousel.style.transform = `translateX(-${index * itemWidth}px)`;
+      }, 500);
+    }
+    carousel.classList.remove("no-transition");
+    carousel.style.transform = `translateX(-${index * itemWidth}px)`;
+  }
+
+  function startCarousel() {
+    interval = setInterval(moveCarousel, 2000);
+  }
+
+  startCarousel();
+</script>
+
+{% endblock %}
