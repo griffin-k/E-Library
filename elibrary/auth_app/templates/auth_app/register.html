@@ -133,7 +133,7 @@
         });
 
         function validateEmail(input, errorId) {
-            document.getElementById(errorId).classList.toggle("hidden", input.value.endsWith("@lgu.edu.pk"));
+            document.getElementById(errorId).classList.toggle("hidden", input.value.endsWith("@gmail.com"));
         }
 
         document.getElementById("studentEmail").addEventListener("input", function () { validateEmail(this, "emailError"); });
