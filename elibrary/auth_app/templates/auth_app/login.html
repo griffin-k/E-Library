@@ -5,53 +5,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
+<style>
+    .hidden { display: none; }
+</style>
+
 <body class="flex items-center justify-center min-h-screen bg-gray-100">
 
-    <div class="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
-        <h2 class="text-2xl font-semibold text-red-600 text-center">Login</h2>
+    <div class="w-full max-w-lg p-6 bg-white rounded-lg shadow-md">
+        <h2 class="text-2xl font-semibold text-red-600 text-center mb-4">Login</h2>
 
-        <!-- Toggle for Student, Faculty & Staff -->
-        <div class="flex justify-center space-x-4 my-4">
-            <button id="studentBtn" class="px-4 py-2 bg-red-600 text-white rounded-md">Student</button>
-            <button id="facultyBtn" class="px-4 py-2 bg-gray-300 text-black rounded-md">Faculty</button>
-            <button id="staffBtn" class="px-4 py-2 bg-gray-300 text-black rounded-md">Staff</button>
+        {% if messages %}
+        <div class="mb-4">
+            {% for message in messages %}
+                <p class="text-sm {% if message.tags == 'error' %}text-red-500{% else %}text-green-500{% endif %}">
+                    {{ message }}
+                </p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Toggle Buttons -->
+        <div class="flex justify-center mb-6">
+            <button id="studentBtn" class="px-4 py-2 mx-2 bg-red-600 text-white rounded-md focus:outline-none">Student</button>
+            <button id="facultyBtn" class="px-4 py-2 mx-2 bg-gray-200 text-gray-700 rounded-md focus:outline-none">Faculty</button>
+            <button id="staffBtn" class="px-4 py-2 mx-2 bg-gray-200 text-gray-700 rounded-md focus:outline-none">Staff</button>
         </div>
 
-        <form action="#" method="POST" class="mt-4">
+        <form id="loginForm" action="#" method="POST" class="space-y-4">
             {% csrf_token %}
+            <input type="hidden" name="user_type" id="user_type" value="student">
 
-            <!-- Student ID Field (Default) -->
-            <div id="studentIDField" class="mt-2">
+            <!-- Student ID Field -->
+            <div id="studentIDField">
                 <label class="block text-gray-700">Student ID</label>
-                <input type="text" name="student_id" class="w-full px-4 py-2 mt-1 border rounded-md focus:ring-red-500 focus:border-red-500">
+                <input type="text" name="student_id" class="w-full px-4 py-2 border rounded-md focus:ring-red-500 focus:border-red-500" placeholder="SP21-BSCS-342">
             </div>
 
-            <!-- Faculty ID Field (Hidden Initially) -->
-            <div id="facultyIDField" class="mt-2 hidden">
+            <!-- Faculty ID Field -->
+            <div id="facultyIDField" class="hidden">
                 <label class="block text-gray-700">Faculty ID</label>
-                <input type="text" name="faculty_id" class="w-full px-4 py-2 mt-1 border rounded-md focus:ring-red-500 focus:border-red-500">
+                <input type="text" name="faculty_id" class="w-full px-4 py-2 border rounded-md focus:ring-red-500 focus:border-red-500" placeholder="T21-IT-123">
             </div>
 
-            <!-- Username Field (Only for Staff) -->
-            <div id="staffUsernameField" class="mt-2 hidden">
+            <!-- Staff Username Field -->
+            <div id="staffUsernameField" class="hidden">
                 <label class="block text-gray-700">Username</label>
-                <input type="text" name="username" class="w-full px-4 py-2 mt-1 border rounded-md focus:ring-red-500 focus:border-red-500">
+                <input type="text" name="username" class="w-full px-4 py-2 border rounded-md focus:ring-red-500 focus:border-red-500" placeholder="admin123">
             </div>
 
-            <!-- Email Field -->
-            <div class="mt-4">
+            <div>
                 <label class="block text-gray-700">Email</label>
-                <input type="email" name="email" id="email" class="w-full px-4 py-2 mt-1 border rounded-md focus:ring-red-500 focus:border-red-500" placeholder="example@lgu.edu.pk" required>
-                <p id="emailError" class="text-red-500 text-sm hidden">Email must end with @lgu.edu.pk</p>
+                <input type="email" name="email" class="w-full px-4 py-2 border rounded-md focus:ring-red-500 focus:border-red-500" placeholder="example@lgu.edu.pk" required>
             </div>
 
-            <!-- Password Field with Show/Hide Toggle -->
-            <div class="mt-4 relative">
+            <div>
                 <label class="block text-gray-700">Password</label>
-                <input type="password" id="password" name="password" class="w-full px-4 py-2 mt-1 border rounded-md focus:ring-red-500 focus:border-red-500">
-                <i id="togglePassword" class="ph ph-eye absolute right-3 top-9 text-gray-500 cursor-pointer"></i>
+                <input type="password" name="password" class="w-full px-4 py-2 border rounded-md focus:ring-red-500 focus:border-red-500">
             </div>
 
             <button class="w-full mt-4 px-4 py-2 text-white bg-red-600 rounded-md hover:bg-red-700">
@@ -65,65 +75,40 @@
     </div>
 
     <script>
-        // Email validation (Only @lgu.edu.pk)
-        document.getElementById("email").addEventListener("input", function () {
-            const emailError = document.getElementById("emailError");
-            if (!this.value.endsWith("@lgu.edu.pk")) {
-                emailError.classList.remove("hidden");
-            } else {
-                emailError.classList.add("hidden");
-            }
-        });
+        const studentBtn = document.getElementById('studentBtn');
+        const facultyBtn = document.getElementById('facultyBtn');
+        const staffBtn = document.getElementById('staffBtn');
+        const userTypeInput = document.getElementById('user_type');
 
-        // Password Show/Hide Toggle
-        document.getElementById("togglePassword").addEventListener("click", function () {
-            const passwordInput = document.getElementById("password");
-            if (passwordInput.type === "password") {
-                passwordInput.type = "text";
-                this.classList.replace("ph-eye", "ph-eye-slash");
-            } else {
-                passwordInput.type = "password";
-                this.classList.replace("ph-eye-slash", "ph-eye");
-            }
-        });
+        const studentIDField = document.getElementById('studentIDField');
+        const facultyIDField = document.getElementById('facultyIDField');
+        const staffUsernameField = document.getElementById('staffUsernameField');
 
-        // Toggle logic for Student, Faculty & Staff
         function toggleLogin(userType) {
-            document.getElementById("studentIDField").classList.add("hidden");
-            document.getElementById("facultyIDField").classList.add("hidden");
-            document.getElementById("staffUsernameField").classList.add("hidden");
+            userTypeInput.value = userType;
+            studentIDField.classList.toggle("hidden", userType !== "student");
+            facultyIDField.classList.toggle("hidden", userType !== "faculty");
+            staffUsernameField.classList.toggle("hidden", userType !== "staff");
 
-            document.getElementById("studentBtn").classList.remove("bg-red-600", "text-white");
-            document.getElementById("facultyBtn").classList.remove("bg-red-600", "text-white");
-            document.getElementById("staffBtn").classList.remove("bg-red-600", "text-white");
+            studentBtn.classList.toggle("bg-red-600", userType === "student");
+            studentBtn.classList.toggle("text-white", userType === "student");
+            studentBtn.classList.toggle("bg-gray-200", userType !== "student");
+            studentBtn.classList.toggle("text-gray-700", userType !== "student");
 
-            document.getElementById("studentBtn").classList.add("bg-gray-300", "text-black");
-            document.getElementById("facultyBtn").classList.add("bg-gray-300", "text-black");
-            document.getElementById("staffBtn").classList.add("bg-gray-300", "text-black");
+            facultyBtn.classList.toggle("bg-red-600", userType === "faculty");
+            facultyBtn.classList.toggle("text-white", userType === "faculty");
+            facultyBtn.classList.toggle("bg-gray-200", userType !== "faculty");
+            facultyBtn.classList.toggle("text-gray-700", userType !== "faculty");
 
-            document.getElementById(userType + "Btn").classList.add("bg-red-600", "text-white");
-            document.getElementById(userType + "Btn").classList.remove("bg-gray-300", "text-black");
-
-            if (userType === "student") {
-                document.getElementById("studentIDField").classList.remove("hidden");
-            } else if (userType === "faculty") {
-                document.getElementById("facultyIDField").classList.remove("hidden");
-            } else if (userType === "staff") {
-                document.getElementById("staffUsernameField").classList.remove("hidden");
-            }
+            staffBtn.classList.toggle("bg-red-600", userType === "staff");
+            staffBtn.classList.toggle("text-white", userType === "staff");
+            staffBtn.classList.toggle("bg-gray-200", userType !== "staff");
+            staffBtn.classList.toggle("text-gray-700", userType !== "staff");
         }
 
-        document.getElementById("studentBtn").addEventListener("click", function () {
-            toggleLogin("student");
-        });
-
-        document.getElementById("facultyBtn").addEventListener("click", function () {
-            toggleLogin("faculty");
-        });
-
-        document.getElementById("staffBtn").addEventListener("click", function () {
-            toggleLogin("staff");
-        });
+        studentBtn.addEventListener("click", () => toggleLogin("student"));
+        facultyBtn.addEventListener("click", () => toggleLogin("faculty"));
+        staffBtn.addEventListener("click", () => toggleLogin("staff"));
     </script>
 
 </body>

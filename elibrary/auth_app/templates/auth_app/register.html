@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
 </head>
 <style>
     .hidden { display: none; }
@@ -13,136 +12,133 @@
 
 <body class="flex items-center justify-center min-h-screen bg-gray-100">
     
-        <div class="w-full max-w-lg p-6 bg-white rounded-lg shadow-md">
-            <h2 class="text-2xl font-semibold text-red-600 text-center mb-4">Register</h2>
-    
-            <!-- Toggle Buttons -->
-            <div class="flex justify-center mb-6">
-                <button id="studentBtn" class="px-4 py-2 mx-2 bg-red-600 text-white rounded-md focus:outline-none">Student</button>
-                <button id="facultyBtn" class="px-4 py-2 mx-2 bg-gray-200 text-gray-700 rounded-md focus:outline-none">Faculty</button>
-            </div>
-    
-            <!-- Student Registration Form -->
-            <form id="studentForm" action="#" method="POST" class="space-y-4">
-                {% csrf_token %}
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-gray-700">First Name</label>
-                        <input type="text" name="first_name" class="w-full px-4 py-2 border rounded-md focus:ring-red-500 focus:border-red-500"placeholder="Taylor">
-                    </div>
-                    <div>
-                        <label class="block text-gray-700">Last Name</label>
-                        <input type="text" name="last_name" class="w-full px-4 py-2 border rounded-md focus:ring-red-500 focus:border-red-500"placeholder="Swift">
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-gray-700">Student ID</label>
-                        <input type="text" name="student_id" class="w-full px-4 py-2 border rounded-md focus:ring-red-500 focus:border-red-500"placeholder="SP21-BSCS-342">
-                    </div>
-                    <div>
-                        <label class="block text-gray-700">Cell No</label>
-                        <input type="text" name="cell_no" class="w-full px-4 py-2 border rounded-md focus:ring-red-500 focus:border-red-500" placeholder="+1 000-000-00" >
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-gray-700">Email</label>
-                    <input type="email" name="email" id="studentEmail" class="w-full px-4 py-2 border rounded-md focus:ring-red-500 focus:border-red-500" placeholder="example@lgu.edu.pk" required>
-                    <p id="emailError" class="text-red-500 text-sm hidden">Email must end with @lgu.edu.pk</p>
-                </div>
-                <div>
-                    <label class="block text-gray-700">Department</label>
-                    <select name="dept" class="w-full px-4 py-2 border rounded-md focus:ring-red-500 focus:border-red-500">
-                        <option value="BSCS">BSCS</option>
-                        <option value="BSIT">BSIT</option>
-                        <option value="BSSE">BSSE</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-gray-700">Password</label>
-                    <input type="password" name="password" class="w-full px-4 py-2 border rounded-md focus:ring-red-500 focus:border-red-500">
-                </div>
-                <button class="w-full mt-4 px-4 py-2 text-white bg-red-600 rounded-md hover:bg-red-700">
-                    Register as Student
-                </button>
-            </form>
-    
-            <!-- Faculty Registration Form -->
-            <form id="facultyForm" action="#" method="POST" class="space-y-4 hidden">
-                {% csrf_token %}
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-gray-700">First Name</label>
-                        <input type="text" name="first_name" class="w-full px-4 py-2 border rounded-md focus:ring-red-500 focus:border-red-500"placeholder="Michelle">
-                    </div>
-                    <div>
-                        <label class="block text-gray-700">Last Name</label>
-                        <input type="text" name="last_name" class="w-full px-4 py-2 border rounded-md focus:ring-red-500 focus:border-red-500"placeholder="Bob">
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-gray-700">Teacher ID</label>
-                        <input type="text" name="teacher_id" class="w-full px-4 py-2 border rounded-md focus:ring-red-500 focus:border-red-500"placeholder="T21-IT-123">
-                    </div>
-                    <div>
-                        <label class="block text-gray-700">Cell No</label>
-                        <input type="text" name="cell_no" class="w-full px-4 py-2 border rounded-md focus:ring-red-500 focus:border-red-500" placeholder="+1 000-000-00" >
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-gray-700">Email</label>
-                    <input type="email" name="email" id="facultyEmail" class="w-full px-4 py-2 border rounded-md focus:ring-red-500 focus:border-red-500" placeholder="example@lgu.edu.pk" required>
-                    <p id="facultyEmailError" class="text-red-500 text-sm hidden">Email must end with @lgu.edu.pk</p>
-                </div>
-                <div>
-                    <label class="block text-gray-700">Department</label>
-                    <select name="dept" class="w-full px-4 py-2 border rounded-md focus:ring-red-500 focus:border-red-500">
-                        <option value="BSCS">BSCS</option>
-                        <option value="BSIT">BSIT</option>
-                        <option value="BSSE">BSSE</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-gray-700">Password</label>
-                    <input type="password" name="password" class="w-full px-4 py-2 border rounded-md focus:ring-red-500 focus:border-red-500">
-                </div>
-                <button class="w-full mt-4 px-4 py-2 text-white bg-red-600 rounded-md hover:bg-red-700">
-                    Register as Faculty
-                </button>
-            </form>
+    <div class="w-full max-w-lg p-6 bg-white rounded-lg shadow-md">
+        <h2 class="text-2xl font-semibold text-red-600 text-center mb-4">Register</h2>
+
+        <!-- Toggle Buttons -->
+        <div class="flex justify-center mb-6">
+            <button id="studentBtn" class="px-4 py-2 mx-2 bg-red-600 text-white rounded-md focus:outline-none">Student</button>
+            <button id="facultyBtn" class="px-4 py-2 mx-2 bg-gray-200 text-gray-700 rounded-md focus:outline-none">Faculty</button>
         </div>
-    
-        <script>
-            const studentBtn = document.getElementById('studentBtn');
-            const facultyBtn = document.getElementById('facultyBtn');
-            const studentForm = document.getElementById('studentForm');
-            const facultyForm = document.getElementById('facultyForm');
-    
-            studentBtn.addEventListener('click', () => {
-                studentForm.classList.remove('hidden');
-                facultyForm.classList.add('hidden');
-                studentBtn.classList.add('bg-red-600', 'text-white');
-                facultyBtn.classList.remove('bg-red-600', 'text-white');
-                facultyBtn.classList.add('bg-gray-200', 'text-gray-700');
-            });
-    
-            facultyBtn.addEventListener('click', () => {
-                facultyForm.classList.remove('hidden');
-                studentForm.classList.add('hidden');
-                facultyBtn.classList.add('bg-red-600', 'text-white');
-                studentBtn.classList.remove('bg-red-600', 'text-white');
-                studentBtn.classList.add('bg-gray-200', 'text-gray-700');
-            });
-    
-            function validateEmail(input, errorId) {
-                document.getElementById(errorId).classList.toggle("hidden", input.value.endsWith("@lgu.edu.pk"));
-            }
-    
-            document.getElementById("studentEmail").addEventListener("input", function () { validateEmail(this, "emailError"); });
-            document.getElementById("facultyEmail").addEventListener("input", function () { validateEmail(this, "facultyEmailError"); });
-        </script>
-    
-    </body>
-    </html>
-    
+
+        <!-- Student Registration Form -->
+        <form id="studentForm" action="{% url 'register' %}" method="POST" class="space-y-4">
+            {% csrf_token %}
+            <input type="hidden" name="user_type" value="student">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-gray-700">First Name</label>
+                    <input type="text" name="first_name" class="w-full px-4 py-2 border rounded-md" placeholder="Taylor" required>
+                </div>
+                <div>
+                    <label class="block text-gray-700">Last Name</label>
+                    <input type="text" name="last_name" class="w-full px-4 py-2 border rounded-md" placeholder="Swift" required>
+                </div>
+            </div>
+            <div>
+                <label class="block text-gray-700">Student ID</label>
+                <input type="text" name="student_id" class="w-full px-4 py-2 border rounded-md" placeholder="SP21-BSCS-342" required>
+            </div>
+            <div>
+                <label class="block text-gray-700">Cell No</label>
+                <input type="text" name="cell_no" class="w-full px-4 py-2 border rounded-md" placeholder="+1 000-000-00" required>
+            </div>
+            <div>
+                <label class="block text-gray-700">Email</label>
+                <input type="email" name="email" id="studentEmail" class="w-full px-4 py-2 border rounded-md" placeholder="example@lgu.edu.pk" required>
+                <p id="emailError" class="text-red-500 text-sm hidden">Email must end with @lgu.edu.pk</p>
+            </div>
+            <div>
+                <label class="block text-gray-700">Department</label>
+                <select name="dept" class="w-full px-4 py-2 border rounded-md">
+                    <option value="BSCS">BSCS</option>
+                    <option value="BSIT">BSIT</option>
+                    <option value="BSSE">BSSE</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-gray-700">Password</label>
+                <input type="password" name="password" class="w-full px-4 py-2 border rounded-md" required>
+            </div>
+            <button class="w-full mt-4 px-4 py-2 text-white bg-red-600 rounded-md hover:bg-red-700">
+                Register as Student
+            </button>
+        </form>
+
+        <!-- Faculty Registration Form -->
+        <form id="facultyForm" action="{% url 'register' %}" method="POST" class="space-y-4 hidden">
+            {% csrf_token %}
+            <input type="hidden" name="user_type" value="faculty">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-gray-700">First Name</label>
+                    <input type="text" name="first_name" class="w-full px-4 py-2 border rounded-md" placeholder="Michelle" required>
+                </div>
+                <div>
+                    <label class="block text-gray-700">Last Name</label>
+                    <input type="text" name="last_name" class="w-full px-4 py-2 border rounded-md" placeholder="Bob" required>
+                </div>
+            </div>
+            <div>
+                <label class="block text-gray-700">Teacher ID</label>
+                <input type="text" name="teacher_id" class="w-full px-4 py-2 border rounded-md" placeholder="T21-IT-123" required>
+            </div>
+            <div>
+                <label class="block text-gray-700">Cell No</label>
+                <input type="text" name="cell_no" class="w-full px-4 py-2 border rounded-md" placeholder="+1 000-000-00" required>
+            </div>
+            <div>
+                <label class="block text-gray-700">Email</label>
+                <input type="email" name="email" id="facultyEmail" class="w-full px-4 py-2 border rounded-md" placeholder="example@lgu.edu.pk" required>
+                <p id="facultyEmailError" class="text-red-500 text-sm hidden">Email must end with @lgu.edu.pk</p>
+            </div>
+            <div>
+                <label class="block text-gray-700">Department</label>
+                <select name="dept" class="w-full px-4 py-2 border rounded-md">
+                    <option value="BSCS">BSCS</option>
+                    <option value="BSIT">BSIT</option>
+                    <option value="BSSE">BSSE</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-gray-700">Password</label>
+                <input type="password" name="password" class="w-full px-4 py-2 border rounded-md" required>
+            </div>
+            <button class="w-full mt-4 px-4 py-2 text-white bg-red-600 rounded-md hover:bg-red-700">
+                Register as Faculty
+            </button>
+        </form>
+    </div>
+
+    <script>
+        const studentBtn = document.getElementById('studentBtn');
+        const facultyBtn = document.getElementById('facultyBtn');
+        const studentForm = document.getElementById('studentForm');
+        const facultyForm = document.getElementById('facultyForm');
+
+        studentBtn.addEventListener('click', () => {
+            studentForm.classList.remove('hidden');
+            facultyForm.classList.add('hidden');
+            studentBtn.classList.add('bg-red-600', 'text-white');
+            facultyBtn.classList.remove('bg-red-600', 'text-white');
+            facultyBtn.classList.add('bg-gray-200', 'text-gray-700');
+        });
+
+        facultyBtn.addEventListener('click', () => {
+            facultyForm.classList.remove('hidden');
+            studentForm.classList.add('hidden');
+            facultyBtn.classList.add('bg-red-600', 'text-white');
+            studentBtn.classList.remove('bg-red-600', 'text-white');
+            studentBtn.classList.add('bg-gray-200', 'text-gray-700');
+        });
+
+        function validateEmail(input, errorId) {
+            document.getElementById(errorId).classList.toggle("hidden", input.value.endsWith("@lgu.edu.pk"));
+        }
+
+        document.getElementById("studentEmail").addEventListener("input", function () { validateEmail(this, "emailError"); });
+        document.getElementById("facultyEmail").addEventListener("input", function () { validateEmail(this, "facultyEmailError"); });
+    </script>
+
+</body>
+</html>
