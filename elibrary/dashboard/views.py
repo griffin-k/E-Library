@@ -9,14 +9,8 @@ from django.shortcuts import render
 def student_page(request):
     return render(request, "dashboard/student_dashboard.html")
 
-
-
 def newArivals(request):
     return render(request, "dashboard/newArivals.html")
-
-
-
-
 
 
 def browse_books(request):
@@ -31,8 +25,8 @@ def browse_books(request):
     if selected_category:
         books = books.filter(category=selected_category)
 
-    # Pagination
-    paginator = Paginator(books, 10)  # Show 10 books per page
+
+    paginator = Paginator(books, 10)  
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -47,7 +41,6 @@ def browse_books(request):
 
 
 def download_book(request, book_id):
-    """Handles downloading a book's PDF file"""
-    book = Book.objects.get(id=book_id)  # Fetch the book by ID
+    book = Book.objects.get(id=book_id) 
     response = FileResponse(book.pdf_file.open(), as_attachment=True, filename=book.pdf_file.name)
     return response

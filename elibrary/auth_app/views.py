@@ -7,10 +7,9 @@ from django.contrib.auth import login
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-
-
-
 from .models import Student, Faculty, Staff
+
+
 
 def login_view(request):
     if request.method == "POST":
@@ -88,8 +87,8 @@ def register(request):
             messages.error(request, "Invalid phone number format.")
             return redirect("register")
 
-        if not email.endswith("@lgu.edu.pk"):
-            messages.error(request, "Email must end with @lgu.edu.pk")
+        if not email.endswith("@gmail.com"):
+            messages.error(request, "Email must end with @gmail.com")
             return redirect("register")
 
         if len(password) < 6:
@@ -122,13 +121,13 @@ def register(request):
             Faculty.objects.create(user=user, teacher_id=teacher_id, cell_no=cell_no, department=dept)
             messages.success(request, "Faculty registered successfully!")
 
-        return redirect("login")  # Redirect to login after successful registration
+        return redirect("login") 
 
     return render(request, "auth_app/register.html")
 
 
 def logout_view(request):
-    logout(request)  # Clears session and logs out the user
+    logout(request) 
     messages.success(request, "Logout successful!")
     return redirect("student_page") 
 
