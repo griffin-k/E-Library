@@ -6,21 +6,16 @@
     <title>Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<style>
-    .hidden { display: none; }
-</style>
-
 <body class="flex items-center justify-center min-h-screen bg-gray-100">
-
+    
     <div class="w-full max-w-lg p-6 bg-white rounded-lg shadow-md">
         <h2 class="text-2xl font-semibold text-red-600 text-center mb-4">Login</h2>
 
+        <!-- Display error messages -->
         {% if messages %}
         <div class="mb-4">
             {% for message in messages %}
-                <p class="text-sm {% if message.tags == 'error' %}text-red-500{% else %}text-green-500{% endif %}">
-                    {{ message }}
-                </p>
+                <p class="text-center text-red-600">{{ message }}</p>
             {% endfor %}
         </div>
         {% endif %}
@@ -32,83 +27,111 @@
             <button id="staffBtn" class="px-4 py-2 mx-2 bg-gray-200 text-gray-700 rounded-md focus:outline-none">Staff</button>
         </div>
 
-        <form id="loginForm" action="#" method="POST" class="space-y-4">
+        <!-- Student Login Form -->
+        <form id="studentForm" action="{% url 'login' %}" method="POST" class="space-y-4">
             {% csrf_token %}
-            <input type="hidden" name="user_type" id="user_type" value="student">
-
-            <!-- Student ID Field -->
-            <div id="studentIDField">
+            <input type="hidden" name="user_type" value="student">
+            <div>
                 <label class="block text-gray-700">Student ID</label>
-                <input type="text" name="student_id" class="w-full px-4 py-2 border rounded-md focus:ring-red-500 focus:border-red-500" placeholder="SP21-BSCS-342">
+                <input type="text" name="student_id" class="w-full px-4 py-2 border rounded-md" placeholder="SP21-BSCS-342" required>
             </div>
-
-            <!-- Faculty ID Field -->
-            <div id="facultyIDField" class="hidden">
-                <label class="block text-gray-700">Faculty ID</label>
-                <input type="text" name="faculty_id" class="w-full px-4 py-2 border rounded-md focus:ring-red-500 focus:border-red-500" placeholder="T21-IT-123">
-            </div>
-
-            <!-- Staff Username Field -->
-            <div id="staffUsernameField" class="hidden">
-                <label class="block text-gray-700">Username</label>
-                <input type="text" name="username" class="w-full px-4 py-2 border rounded-md focus:ring-red-500 focus:border-red-500" placeholder="admin123">
-            </div>
-
             <div>
                 <label class="block text-gray-700">Email</label>
-                <input type="email" name="email" class="w-full px-4 py-2 border rounded-md focus:ring-red-500 focus:border-red-500" placeholder="example@gmail.com" required>
+                <input type="email" name="email" class="w-full px-4 py-2 border rounded-md" placeholder="example@lgu.edu.pk" required>
             </div>
-
             <div>
                 <label class="block text-gray-700">Password</label>
-                <input type="password" name="password" class="w-full px-4 py-2 border rounded-md focus:ring-red-500 focus:border-red-500">
+                <input type="password" name="password" class="w-full px-4 py-2 border rounded-md" required>
             </div>
-
             <button class="w-full mt-4 px-4 py-2 text-white bg-red-600 rounded-md hover:bg-red-700">
-                Login
+                Login as Student
             </button>
         </form>
 
-        <p class="mt-4 text-center text-gray-600">
-            Don't have an account? <a href="{% url 'register' %}" class="text-red-600 hover:underline">Register</a>
-        </p>
+        <!-- Faculty Login Form -->
+        <form id="facultyForm" action="{% url 'login' %}" method="POST" class="space-y-4 hidden">
+            {% csrf_token %}
+            <input type="hidden" name="user_type" value="faculty">
+            <div>
+                <label class="block text-gray-700">Faculty ID</label>
+                <input type="text" name="faculty_id" class="w-full px-4 py-2 border rounded-md" placeholder="T21-IT-123" required>
+            </div>
+            <div>
+                <label class="block text-gray-700">Email</label>
+                <input type="email" name="email" class="w-full px-4 py-2 border rounded-md" placeholder="example@lgu.edu.pk" required>
+            </div>
+            <div>
+                <label class="block text-gray-700">Password</label>
+                <input type="password" name="password" class="w-full px-4 py-2 border rounded-md" required>
+            </div>
+            <button class="w-full mt-4 px-4 py-2 text-white bg-red-600 rounded-md hover:bg-red-700">
+                Login as Faculty
+            </button>
+        </form>
+
+        <!-- Staff Login Form -->
+        <form id="staffForm" action="{% url 'login' %}" method="POST" class="space-y-4 hidden">
+            {% csrf_token %}
+            <input type="hidden" name="user_type" value="staff">
+            <div>
+                <label class="block text-gray-700">Username</label>
+                <input type="text" name="username" class="w-full px-4 py-2 border rounded-md" placeholder="admin" required>
+            </div>
+            <div>
+                <label class="block text-gray-700">Email</label>
+                <input type="email" name="email" class="w-full px-4 py-2 border rounded-md" placeholder="admin@lgu.edu.pk" required>
+            </div>
+            <div>
+                <label class="block text-gray-700">Password</label>
+                <input type="password" name="password" class="w-full px-4 py-2 border rounded-md" required>
+            </div>
+            <button class="w-full mt-4 px-4 py-2 text-white bg-red-600 rounded-md hover:bg-red-700">
+                Login as Staff
+            </button>
+        </form>
     </div>
 
     <script>
         const studentBtn = document.getElementById('studentBtn');
         const facultyBtn = document.getElementById('facultyBtn');
         const staffBtn = document.getElementById('staffBtn');
-        const userTypeInput = document.getElementById('user_type');
 
-        const studentIDField = document.getElementById('studentIDField');
-        const facultyIDField = document.getElementById('facultyIDField');
-        const staffUsernameField = document.getElementById('staffUsernameField');
+        const studentForm = document.getElementById('studentForm');
+        const facultyForm = document.getElementById('facultyForm');
+        const staffForm = document.getElementById('staffForm');
 
-        function toggleLogin(userType) {
-            userTypeInput.value = userType;
-            studentIDField.classList.toggle("hidden", userType !== "student");
-            facultyIDField.classList.toggle("hidden", userType !== "faculty");
-            staffUsernameField.classList.toggle("hidden", userType !== "staff");
+        studentBtn.addEventListener('click', () => {
+            studentForm.classList.remove('hidden');
+            facultyForm.classList.add('hidden');
+            staffForm.classList.add('hidden');
+            studentBtn.classList.add('bg-red-600', 'text-white');
+            facultyBtn.classList.remove('bg-red-600', 'text-white');
+            facultyBtn.classList.add('bg-gray-200', 'text-gray-700');
+            staffBtn.classList.remove('bg-red-600', 'text-white');
+            staffBtn.classList.add('bg-gray-200', 'text-gray-700');
+        });
 
-            studentBtn.classList.toggle("bg-red-600", userType === "student");
-            studentBtn.classList.toggle("text-white", userType === "student");
-            studentBtn.classList.toggle("bg-gray-200", userType !== "student");
-            studentBtn.classList.toggle("text-gray-700", userType !== "student");
+        facultyBtn.addEventListener('click', () => {
+            facultyForm.classList.remove('hidden');
+            studentForm.classList.add('hidden');
+            staffForm.classList.add('hidden');
+            facultyBtn.classList.add('bg-red-600', 'text-white');
+            studentBtn.classList.remove('bg-red-600', 'text-white');
+            studentBtn.classList.add('bg-gray-200', 'text-gray-700');
+            staffBtn.classList.remove('bg-red-600', 'text-white');
+            staffBtn.classList.add('bg-gray-200', 'text-gray-700');
+        });
 
-            facultyBtn.classList.toggle("bg-red-600", userType === "faculty");
-            facultyBtn.classList.toggle("text-white", userType === "faculty");
-            facultyBtn.classList.toggle("bg-gray-200", userType !== "faculty");
-            facultyBtn.classList.toggle("text-gray-700", userType !== "faculty");
-
-            staffBtn.classList.toggle("bg-red-600", userType === "staff");
-            staffBtn.classList.toggle("text-white", userType === "staff");
-            staffBtn.classList.toggle("bg-gray-200", userType !== "staff");
-            staffBtn.classList.toggle("text-gray-700", userType !== "staff");
-        }
-
-        studentBtn.addEventListener("click", () => toggleLogin("student"));
-        facultyBtn.addEventListener("click", () => toggleLogin("faculty"));
-        staffBtn.addEventListener("click", () => toggleLogin("staff"));
+        staffBtn.addEventListener('click', () => {
+            staffForm.classList.remove('hidden');
+            studentForm.classList.add('hidden');
+            facultyForm.classList.add('hidden');
+            staffBtn.classList.add('bg-red-600', 'text-white');
+            studentBtn.classList.remove('bg-red-600', 'text-white');
+            studentBtn.classList.add('bg-gray-200', 'text-gray-700');
+            facultyBtn.classList.remove('bg-red-600', 'text-white');
+            facultyBtn.classList.add('bg-gray-200', 'text-gray-700');
+        });
     </script>
 
 </body>

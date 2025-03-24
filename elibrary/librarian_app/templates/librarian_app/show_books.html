@@ -1,0 +1,103 @@
+{% extends 'librarian_app/base.html' %}
+{% block title %}Show Books{% endblock %}
+{% block content %}
+{% load static %}
+
+<div class="fixed top-20 left-80 right-5 bottom-5 overflow-y-auto bg-white p-8 rounded-lg shadow-lg border border-gray-200">
+    <h2 class="text-3xl font-bold text-gray-700 mb-6 text-center">Available Books</h2>
+
+    <!-- Filters (Centered) -->
+    <div class="flex flex-col items-center space-y-4 mb-6 w-full">
+        <!-- Search Bar -->
+        <input type="text" id="searchInput" placeholder="Search by title, author, or accession number..."
+            class="p-3 border border-gray-400 rounded-lg shadow-sm w-full md:w-1/2 text-center"
+            value="{{ search_query }}" />
+    
+        <!-- Category Dropdown -->
+        <select id="categoryFilter"
+            class="p-3 border border-gray-400 rounded-lg shadow-sm w-full md:w-1/2 text-center">
+            <option value="">All Categories</option>
+            {% for category in categories %}
+            <option value="{{ category }}" {% if category == selected_category %}selected{% endif %}>
+                {{ category }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+    
+
+    <!-- Books Table -->
+    <div class="overflow-x-auto">
+        <table class="w-full border-collapse border border-gray-400 shadow-lg rounded-xl overflow-hidden">
+            <thead>
+                <tr class="bg-gray-700 text-white">
+                    <th class="p-3 border border-gray-500">Accession No</th>
+                    <th class="p-3 border border-gray-500">Title</th>
+                    <th class="p-3 border border-gray-500">Author</th>
+                    <th class="p-3 border border-gray-500">Category</th>
+                    <th class="p-3 border border-gray-500">Edition</th>
+                    <th class="p-3 border border-gray-500">Published Date</th>
+                    <th class="p-3 border border-gray-500">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="bookTable">
+                {% for book in books %}
+                <tr class="text-center bg-gray-50 hover:bg-gray-200 transition duration-200">
+                    <td class="p-3 border border-gray-400">{{ book.accession_number }}</td>
+                    <td class="p-3 border border-gray-400">{{ book.title }}</td>
+                    <td class="p-3 border border-gray-400">{{ book.author }}</td>
+                    <td class="p-3 border border-gray-400">{{ book.category }}</td>
+                    <td class="p-3 border border-gray-400">{{ book.edition }}</td>
+                    <td class="p-3 border border-gray-400">{{ book.publish_date }}</td>
+                    <td class="p-3 border border-gray-400">
+                        <a href="{{ book.pdf_file.url }}" target="_blank" class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 shadow">
+                            View
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center p-4 bg-gray-100 text-gray-700">No books found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+
+    <!-- Pagination -->
+    <div class="flex justify-center space-x-2 mt-6">
+        {% if books.has_previous %}
+        <a href="?search={{ search_query }}&category={{ selected_category }}&page=1"
+            class="px-4 py-2 bg-gray-300 rounded-lg">First</a>
+        <a href="?search={{ search_query }}&category={{ selected_category }}&page={{ books.previous_page_number }}"
+            class="px-4 py-2 bg-gray-300 rounded-lg">Previous</a>
+        {% endif %}
+
+        <span class="px-4 py-2 bg-blue-500 text-white rounded-lg">Page {{ books.number }} of {{ books.paginator.num_pages }}</span>
+
+        {% if books.has_next %}
+        <a href="?search={{ search_query }}&category={{ selected_category }}&page={{ books.next_page_number }}"
+            class="px-4 py-2 bg-gray-300 rounded-lg">Next</a>
+        <a href="?search={{ search_query }}&category={{ selected_category }}&page={{ books.paginator.num_pages }}"
+            class="px-4 py-2 bg-gray-300 rounded-lg">Last</a>
+        {% endif %}
+    </div>
+
+</div>
+
+<script>
+document.getElementById("searchInput").addEventListener("input", function () {
+    let query = this.value;
+    let category = document.getElementById("categoryFilter").value;
+    window.location.href = `?search=${query}&category=${category}`;
+});
+
+document.getElementById("categoryFilter").addEventListener("change", function () {
+    let category = this.value;
+    let query = document.getElementById("searchInput").value;
+    window.location.href = `?search=${query}&category=${category}`;
+});
+</script>
+
+{% endblock %}

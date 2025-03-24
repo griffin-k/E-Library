@@ -1,24 +1,28 @@
 from django.db import models
+from django.contrib.auth.models import User
 
-class User(models.Model):
-    USER_TYPES = [
-        ('student', 'Student'),
-        ('faculty', 'Faculty'),
-        ('staff', 'Staff'),
-    ]
-
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
-    phone = models.CharField(max_length=15)
+class Student(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    student_id = models.CharField(max_length=20, unique=True)
+    cell_no = models.CharField(max_length=15)
     department = models.CharField(max_length=50)
-    user_type = models.CharField(max_length=10, choices=USER_TYPES)
-    password = models.CharField(max_length=255)  # Store hashed password
-
-    # Fields specific to each user type
-    student_id = models.CharField(max_length=50, blank=True, null=True)
-    teacher_id = models.CharField(max_length=50, blank=True, null=True)
-    username = models.CharField(max_length=50, blank=True, null=True)  # For staff login
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name} ({self.user_type})"
+        return f"{self.user.first_name} {self.user.last_name} - {self.student_id}"
+
+class Faculty(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    teacher_id = models.CharField(max_length=20, unique=True)
+    cell_no = models.CharField(max_length=15)
+    department = models.CharField(max_length=50)
+
+    def __str__(self):
+        return f"{self.user.first_name} {self.user.last_name} - {self.teacher_id}"
+
+class Staff(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    staff_id = models.CharField(max_length=20, unique=True)
+    department = models.CharField(max_length=50)
+
+    def __str__(self):
+        return f"{self.user.first_name} {self.user.last_name} - {self.staff_id}"

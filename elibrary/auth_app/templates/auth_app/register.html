@@ -15,6 +15,17 @@
     <div class="w-full max-w-lg p-6 bg-white rounded-lg shadow-md">
         <h2 class="text-2xl font-semibold text-red-600 text-center mb-4">Register</h2>
 
+        <!-- Display Messages -->
+        {% if messages %}
+            <div class="mb-4">
+                {% for message in messages %}
+                    <p class="text-center p-2 text-white {% if message.tags == 'error' %} bg-red-500 {% else %} bg-green-500 {% endif %} rounded-md">
+                        {{ message }}
+                    </p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
         <!-- Toggle Buttons -->
         <div class="flex justify-center mb-6">
             <button id="studentBtn" class="px-4 py-2 mx-2 bg-red-600 text-white rounded-md focus:outline-none">Student</button>
@@ -28,24 +39,24 @@
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label class="block text-gray-700">First Name</label>
-                    <input type="text" name="first_name" class="w-full px-4 py-2 border rounded-md" placeholder="Taylor" required>
+                    <input type="text" name="first_name" class="w-full px-4 py-2 border rounded-md" required>
                 </div>
                 <div>
                     <label class="block text-gray-700">Last Name</label>
-                    <input type="text" name="last_name" class="w-full px-4 py-2 border rounded-md" placeholder="Swift" required>
+                    <input type="text" name="last_name" class="w-full px-4 py-2 border rounded-md" required>
                 </div>
             </div>
             <div>
                 <label class="block text-gray-700">Student ID</label>
-                <input type="text" name="student_id" class="w-full px-4 py-2 border rounded-md" placeholder="SP21-BSCS-342" required>
+                <input type="text" name="student_id" class="w-full px-4 py-2 border rounded-md" required>
             </div>
             <div>
                 <label class="block text-gray-700">Cell No</label>
-                <input type="text" name="cell_no" class="w-full px-4 py-2 border rounded-md" placeholder="+1 000-000-00" required>
+                <input type="text" name="cell_no" class="w-full px-4 py-2 border rounded-md" required>
             </div>
             <div>
                 <label class="block text-gray-700">Email</label>
-                <input type="email" name="email" id="studentEmail" class="w-full px-4 py-2 border rounded-md" placeholder="example@lgu.edu.pk" required>
+                <input type="email" name="email" id="studentEmail" class="w-full px-4 py-2 border rounded-md" required>
                 <p id="emailError" class="text-red-500 text-sm hidden">Email must end with @lgu.edu.pk</p>
             </div>
             <div>
@@ -72,24 +83,24 @@
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label class="block text-gray-700">First Name</label>
-                    <input type="text" name="first_name" class="w-full px-4 py-2 border rounded-md" placeholder="Michelle" required>
+                    <input type="text" name="first_name" class="w-full px-4 py-2 border rounded-md" required>
                 </div>
                 <div>
                     <label class="block text-gray-700">Last Name</label>
-                    <input type="text" name="last_name" class="w-full px-4 py-2 border rounded-md" placeholder="Bob" required>
+                    <input type="text" name="last_name" class="w-full px-4 py-2 border rounded-md" required>
                 </div>
             </div>
             <div>
                 <label class="block text-gray-700">Teacher ID</label>
-                <input type="text" name="teacher_id" class="w-full px-4 py-2 border rounded-md" placeholder="T21-IT-123" required>
+                <input type="text" name="teacher_id" class="w-full px-4 py-2 border rounded-md" required>
             </div>
             <div>
                 <label class="block text-gray-700">Cell No</label>
-                <input type="text" name="cell_no" class="w-full px-4 py-2 border rounded-md" placeholder="+1 000-000-00" required>
+                <input type="text" name="cell_no" class="w-full px-4 py-2 border rounded-md" required>
             </div>
             <div>
                 <label class="block text-gray-700">Email</label>
-                <input type="email" name="email" id="facultyEmail" class="w-full px-4 py-2 border rounded-md" placeholder="example@lgu.edu.pk" required>
+                <input type="email" name="email" id="facultyEmail" class="w-full px-4 py-2 border rounded-md" required>
                 <p id="facultyEmailError" class="text-red-500 text-sm hidden">Email must end with @lgu.edu.pk</p>
             </div>
             <div>
@@ -133,7 +144,7 @@
         });
 
         function validateEmail(input, errorId) {
-            document.getElementById(errorId).classList.toggle("hidden", input.value.endsWith("@gmail.com"));
+            document.getElementById(errorId).classList.toggle("hidden", input.value.endsWith("@lgu.edu.pk"));
         }
 
         document.getElementById("studentEmail").addEventListener("input", function () { validateEmail(this, "emailError"); });

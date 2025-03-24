@@ -1,0 +1,74 @@
+{% extends 'librarian_app/base.html' %}
+{% block title %}Show Members{% endblock %}
+{% block content %}
+
+<div class="fixed top-20 left-80 right-5 bottom-5 overflow-y-auto bg-white p-8 rounded-lg shadow-lg border border-gray-200">
+    <h2 class="text-3xl font-bold text-gray-700 mb-6 text-center">Available Members</h2>
+
+    <!-- Search and Filter -->
+    <div class="flex flex-col items-center space-y-4 mb-6 w-full">
+        <!-- Search Bar -->
+        <input type="text" id="searchInput" placeholder="Search by name or ID..."
+            class="p-3 border border-gray-400 rounded-lg shadow-sm w-full md:w-1/2 text-center"
+            value="{{ search_query }}" />
+
+        <!-- Type Filter Dropdown -->
+        <select id="typeFilter"
+            class="p-3 border border-gray-400 rounded-lg shadow-sm w-full md:w-1/2 text-center">
+            {% for type in types %}
+            <option value="{{ type }}" {% if type == selected_type %}selected{% endif %}>
+                {{ type }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Members Table -->
+    <div class="overflow-x-auto">
+        <table class="w-full border-collapse border border-gray-400 shadow-lg rounded-xl overflow-hidden">
+            <thead>
+                <tr class="bg-gray-700 text-white">
+                    <th class="p-3 border border-gray-500">ID</th>
+                    <th class="p-3 border border-gray-500">Name</th>
+                    <th class="p-3 border border-gray-500">Email</th>
+                    <th class="p-3 border border-gray-500">Cell No</th>
+                    <th class="p-3 border border-gray-500">Department</th>
+                    <th class="p-3 border border-gray-500">Type</th>
+                </tr>
+            </thead>
+            <tbody id="memberTable">
+                {% for member in members %}
+                <tr class="text-center bg-gray-50 hover:bg-gray-200 transition duration-200">
+                    <td class="p-3 border border-gray-400">{{ member.id }}</td>
+                    <td class="p-3 border border-gray-400">{{ member.name }}</td>
+                    <td class="p-3 border border-gray-400">{{ member.email }}</td>
+                    <td class="p-3 border border-gray-400">{{ member.cell_no }}</td>
+                    <td class="p-3 border border-gray-400">{{ member.department }}</td>
+                    <td class="p-3 border border-gray-400 font-semibold">{{ member.type }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center p-4 bg-gray-100 text-gray-700">No members found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<script>
+document.getElementById("searchInput").addEventListener("input", function () {
+    let query = this.value;
+    let type = document.getElementById("typeFilter").value;
+    window.location.href = `?search=${query}&type=${type}`;
+});
+
+document.getElementById("typeFilter").addEventListener("change", function () {
+    let type = this.value;
+    let query = document.getElementById("searchInput").value;
+    window.location.href = `?search=${query}&type=${type}`;
+});
+</script>
+
+{% endblock %}
