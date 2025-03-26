@@ -2,11 +2,12 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
-from librarian_app.views import libraian_dashboard, add_member,add_book, add_book_form,get_next_accession_number,show_books,show_members, download_members_csv, download_books_csv,settings_page,support_desk,support_submit
+
+from librarian_app.views import librarian_dashboard, add_member,add_book, add_book_form,get_next_accession_number,show_books,show_members, download_members_csv, download_books_csv,settings_page,support_desk,support_submit
 
 urlpatterns = [
-
-    path("libraian_dashboard/", libraian_dashboard, name="libraian_dashboard"),
+    path("auth/", include("auth_app.urls")),
+    path("librarian_dashboard/", librarian_dashboard, name="librarian_dashboard"),
     path("add_member/", add_member, name="add_member"),
     path('addBook_form/', add_book_form, name='addBook_form'),  # Render Add Book page
     path('add_book/', add_book, name='add_book'),  
@@ -16,6 +17,10 @@ urlpatterns = [
     path("setting/", settings_page, name="setting"),
     path("download_members_csv/", download_members_csv, name="download_members_csv"),
     path("download_books_csv/", download_books_csv, name="download_books_csv"),
+
+
+
+
 
 
 

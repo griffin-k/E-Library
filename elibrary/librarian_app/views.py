@@ -19,8 +19,19 @@ from datetime import datetime
 
 
 # Create your views here.
-def libraian_dashboard(request):
-    return render(request, "librarian_app/librarian_dashboard.html")
+from auth_app.models import Student, Faculty  # Import Student & Faculty models
+
+def librarian_dashboard(request):
+    total_books = Book.objects.count()  # Count all books
+    total_members = Student.objects.count()  # Count all students (members)
+    total_faculty = Faculty.objects.count()  # Count all faculty members
+
+    context = {
+        "total_books": total_books,
+        "total_members": total_members,
+        "total_faculty": total_faculty,
+    }
+    return render(request, "librarian_app/librarian_dashboard.html", context)
 
 
 def add_member(request):
@@ -222,3 +233,8 @@ def support_submit(request):
         return redirect('support_desk')
 
     return redirect('support_desk')
+
+
+
+
+    

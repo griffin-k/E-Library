@@ -8,22 +8,30 @@
 <div class="fixed top-20 left-80 right-5 bottom-5 overflow-y-auto bg-white p-6 rounded-lg shadow-lg border border-gray-200">
 
     <!-- Dashboard Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-center mb-10">
-        <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
-            <img src="{% static 'images/books.png' %}" alt="Total Books" class="mx-auto mb-3 h-12 w-12">
-            <h3 class="text-lg font-semibold text-gray-700">Total Books</h3>
-            <p class="text-3xl font-bold text-gray-500">2,450</p>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
-            <img src="{% static 'images/member.png' %}" alt="Members" class="mx-auto mb-3 h-12 w-12">
-            <h3 class="text-lg font-semibold text-gray-700">Members</h3>
-            <p class="text-3xl font-bold text-gray-500">1,220</p>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
-            <img src="{% static 'images/faculty.png' %}" alt="Faculty" class="mx-auto mb-3 h-12 w-12">
-            <h3 class="text-lg font-semibold text-gray-700">Faculty</h3>
-            <p class="text-3xl font-bold text-gray-500">85</p>
-        </div>
+  
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-center mb-10">
+            <!-- Total Books -->
+            <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+                <img src="{% static 'images/books.png' %}" alt="Total Books" class="mx-auto mb-3 h-12 w-12">
+                <h3 class="text-lg font-semibold text-gray-700">Total Books</h3>
+                <p class="text-3xl font-bold text-gray-500">{{ total_books }}</p>
+            </div>
+        
+            <!-- Total Members -->
+            <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+                <img src="{% static 'images/member.png' %}" alt="Members" class="mx-auto mb-3 h-12 w-12">
+                <h3 class="text-lg font-semibold text-gray-700">Members</h3>
+                <p class="text-3xl font-bold text-gray-500">{{ total_members }}</p>
+            </div>
+        
+            <!-- Total Faculty -->
+            <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+                <img src="{% static 'images/faculty.png' %}" alt="Faculty" class="mx-auto mb-3 h-12 w-12">
+                <h3 class="text-lg font-semibold text-gray-700">Faculty</h3>
+                <p class="text-3xl font-bold text-gray-500">{{ total_faculty }}</p>
+            </div>
+
+        
         <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
             <img src="{% static 'images/download.png' %}" alt="Downloads" class="mx-auto mb-3 h-12 w-12">
             <h3 class="text-lg font-semibold text-gray-700">Downloads</h3>

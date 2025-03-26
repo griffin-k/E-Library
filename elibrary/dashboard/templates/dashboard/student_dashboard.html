@@ -88,7 +88,7 @@
       <span class="text-red-800 font-semibold">Real-Time Update:</span>
       <span class="ml-2">New books added today: <span class="real-time-update font-bold">15</span></span>
     </div>
-    <a href="dashboard/newarivals/" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+    <a href="{%url 'newarivals'%}" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
         View New Arrivals
     </a>
     <!-- <button class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">View New Arrivals</button> -->
@@ -99,18 +99,19 @@
 <div class="container mx-auto px-5 my-10">
   <h2 class="text-2xl font-bold mb-6 text-center">Explore by Category</h2>
   <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
-    <a href="dashboard/bycategory/" class="category-card">📖 Fiction</a>
-    <a href="dashboard/bycategory/" class="category-card">🔬 Science</a>
-    <a href="dashboard/bycategory/" class="category-card">🏛️ History</a>
-    <a href="dashboard/bycategory/" class="category-card">💼 Business</a>
-    <a href="dashboard/bycategory/" class="category-card">🎨 Art & Design</a>
-    <a href="dashboard/bycategory/" class="category-card">📚 Literature</a>
-    <a href="dashboard/bycategory/" class="category-card">🔍 Research</a>
-    <a href="dashboard/bycategory/" class="category-card">🚀 Technology</a>
-    <a href="dashboard/bycategory/" class="category-card">🧠 Self-Help</a>
-    <a href="dashboard/bycategory/" class="category-card">🌍 Travel</a>
+    <a href="{% url 'browse_books' %}" class="category-card">📖 Fiction</a>
+    <a href="{% url 'browse_books' %}" class="category-card">🔬 Science</a>
+    <a href="{% url 'browse_books' %}" class="category-card">🏛️ History</a>
+    <a href="{% url 'browse_books' %}" class="category-card">💼 Business</a>
+    <a href="{% url 'browse_books' %}" class="category-card">🎨 Art & Design</a>
+    <a href="{% url 'browse_books' %}" class="category-card">📚 Literature</a>
+    <a href="{% url 'browse_books' %}" class="category-card">🔍 Research</a>
+    <a href="{% url 'browse_books' %}" class="category-card">🚀 Technology</a>
+    <a href="{% url 'browse_books' %}" class="category-card">🧠 Self-Help</a>
+    <a href="{% url 'browse_books' %}" class="category-card">🌍 Travel</a>
   </div>
 </div>
+
 
 <!-- Featured Books Carousel -->
 <div class="carousel">

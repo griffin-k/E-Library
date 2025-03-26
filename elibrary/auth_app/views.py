@@ -11,6 +11,9 @@ from .models import Student, Faculty, Staff
 
 
 
+
+
+
 def login_view(request):
     if request.method == "POST":
         user_type = request.POST.get("user_type")
@@ -18,7 +21,6 @@ def login_view(request):
         password = request.POST.get("password")
         student_id = request.POST.get("student_id", None)
         faculty_id = request.POST.get("faculty_id", None)
-        staff_id = request.POST.get("staff_id", None)
 
         try:
             user = None
@@ -30,8 +32,7 @@ def login_view(request):
                 faculty = Faculty.objects.get(teacher_id=faculty_id)
                 user = faculty.user
             elif user_type == "staff":
-                staff = Staff.objects.get(staff_id=staff_id)
-                user = staff.user
+                user = User.objects.get(email=email)  # Staff login only needs email and password
             else:
                 messages.error(request, "Invalid user type.")
                 return redirect("login")
@@ -47,13 +48,13 @@ def login_view(request):
                 elif user_type == "faculty":
                     return redirect("faculty_dashboard")
                 elif user_type == "staff":
-                    return redirect("staff_dashboard")
+                    return redirect("librarian_dashboard")
 
             else:
                 messages.error(request, "Invalid credentials.")
                 return redirect("login")
 
-        except (Student.DoesNotExist, Faculty.DoesNotExist, Staff.DoesNotExist, User.DoesNotExist):
+        except (Student.DoesNotExist, Faculty.DoesNotExist, User.DoesNotExist):
             messages.error(request, "User not found.")
         except User.MultipleObjectsReturned:
             messages.error(request, "Multiple accounts found. Contact admin.")
@@ -66,27 +67,11 @@ def login_view(request):
 
 def register(request):
     if request.method == "POST":
-        user_type = request.POST.get("user_type")
-        first_name = request.POST.get("first_name").strip()
-        last_name = request.POST.get("last_name").strip()
-        email = request.POST.get("email").strip()
-        cell_no = request.POST.get("cell_no").strip()
-        dept = request.POST.get("dept")
-        password = request.POST.get("password")
-        
-        # Validation
-        if not first_name or not last_name:
-            messages.error(request, "First Name and Last Name are required.")
-            return redirect("register")
+        user_type = request.POST.get("user_type", "").strip()
+        email = request.POST.get("email", "").strip()
+        password = request.POST.get("password", "")
 
-        if not re.match(r'^[a-zA-Z]+$', first_name) or not re.match(r'^[a-zA-Z]+$', last_name):
-            messages.error(request, "First Name and Last Name should contain only alphabets.")
-            return redirect("register")
-
-        if not re.match(r'^\+?\d{10,15}$', cell_no):
-            messages.error(request, "Invalid phone number format.")
-            return redirect("register")
-
+        # Validation (Common for all users)
         if not email.endswith("@gmail.com"):
             messages.error(request, "Email must end with @gmail.com")
             return redirect("register")
@@ -100,11 +85,36 @@ def register(request):
             messages.error(request, "User with this email already exists.")
             return redirect("register")
 
-        # Create user
+        # Staff Registration (Only email & password required)
+        if user_type == "staff":
+            user = User.objects.create_user(username=email, email=email, password=password)
+            Staff.objects.create(user=user)
+            messages.success(request, "Staff registered successfully!")
+            return redirect("login")
+
+        # Students and Faculty require additional details
+        first_name = request.POST.get("first_name", "").strip()
+        last_name = request.POST.get("last_name", "").strip()
+        cell_no = request.POST.get("cell_no", "").strip()
+        dept = request.POST.get("dept", "").strip()
+
+        if not first_name or not last_name:
+            messages.error(request, "First Name and Last Name are required.")
+            return redirect("register")
+
+        if not re.match(r'^[a-zA-Z]+$', first_name) or not re.match(r'^[a-zA-Z]+$', last_name):
+            messages.error(request, "First Name and Last Name should contain only alphabets.")
+            return redirect("register")
+
+        if not re.match(r'^\+?\d{10,15}$', cell_no):
+            messages.error(request, "Invalid phone number format.")
+            return redirect("register")
+
+        # Create user for students and faculty
         user = User.objects.create_user(username=email, email=email, password=password, first_name=first_name, last_name=last_name)
 
         if user_type == "student":
-            student_id = request.POST.get("student_id").strip()
+            student_id = request.POST.get("student_id", "").strip()
             if not student_id:
                 messages.error(request, "Student ID is required.")
                 return redirect("register")
@@ -113,7 +123,7 @@ def register(request):
             messages.success(request, "Student registered successfully!")
 
         elif user_type == "faculty":
-            teacher_id = request.POST.get("teacher_id").strip()
+            teacher_id = request.POST.get("teacher_id", "").strip()
             if not teacher_id:
                 messages.error(request, "Teacher ID is required.")
                 return redirect("register")
@@ -124,6 +134,15 @@ def register(request):
         return redirect("login") 
 
     return render(request, "auth_app/register.html")
+
+
+
+
+
+
+
+
+
 
 
 def logout_view(request):
