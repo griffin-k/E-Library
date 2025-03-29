@@ -241,6 +241,73 @@
   </div>
 </div>
 
+<!-- AI Chat Floating Button -->
+<div id="chat-button" class="fixed bottom-6 right-6 bg-red-600 text-white p-4 rounded-full shadow-lg cursor-pointer transition hover:bg-red-800">
+  💬 AI Chat
+</div>
+
+<!-- Chat Box -->
+<div id="chat-box" class="hidden fixed bottom-16 right-6 w-80 bg-white shadow-xl rounded-2xl overflow-hidden transition-all">
+  <div class="bg-red-600 text-white p-3 flex justify-between items-center">
+    <span class="font-semibold">Ask AI</span>
+    <button id="close-chat" class="text-white text-lg">&times;</button>
+  </div>
+  <div id="chat-content" class="p-4 h-64 overflow-y-auto text-gray-800">
+    <p class="text-sm text-gray-500">Start chatting with AI...</p>
+  </div>
+  <div class="border-t p-3 flex items-center bg-gray-100">
+    <input id="chat-input" type="text" class="w-full p-2 border rounded-lg outline-none" placeholder="Type a message...">
+    <button id="send-btn" class="ml-2 bg-red-600 text-white p-2 rounded-lg hover:bg-red-800 transition">➤</button>
+  </div>
+</div>
+
+<script>
+document.getElementById("chat-button").addEventListener("click", () => {
+  document.getElementById("chat-box").classList.toggle("hidden");
+});
+
+document.getElementById("close-chat").addEventListener("click", () => {
+  document.getElementById("chat-box").classList.add("hidden");
+});
+
+document.getElementById("send-btn").addEventListener("click", sendMessage);
+document.getElementById("chat-input").addEventListener("keypress", (e) => {
+  if (e.key === "Enter") sendMessage();
+});
+
+async function sendMessage() {
+  let input = document.getElementById("chat-input").value.trim();
+  if (!input) return;
+
+  let chatContent = document.getElementById("chat-content");
+  chatContent.innerHTML += `<div class="my-2 p-2 bg-gray-200 rounded-lg self-end text-right">${input}</div>`;
+  document.getElementById("chat-input").value = "";
+
+  chatContent.innerHTML += `<div class="my-2 p-2 bg-blue-100 rounded-lg">🤖 Typing...</div>`;
+  chatContent.scrollTop = chatContent.scrollHeight;
+
+  let response = await fetch("https://api.groq.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer YOUR_GROQ_API_KEY"
+    },
+    body: JSON.stringify({
+      model: "mixtral-8x7b",
+      messages: [{ role: "user", content: input }]
+    })
+  });
+
+  let data = await response.json();
+  chatContent.innerHTML += `<div class="my-2 p-2 bg-green-200 rounded-lg">${data.choices[0].message.content}</div>`;
+  chatContent.scrollTop = chatContent.scrollHeight;
+}
+</script>
+
+
+
+
+
 <script>
 let index = 0;
   const carousel = document.querySelector(".carousel-inner");
