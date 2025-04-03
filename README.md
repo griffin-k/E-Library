@@ -1,6 +1,5 @@
 # **Library Management System with AI Chatbot**
 
-![Library Management System](https://via.placeholder.com/1200x400?text=Library+Management+System)
 
 A sophisticated **Library Management System** built using **Django**. This system provides a complete set of features for managing library operations, including book management, user authentication, and interactive charts. Additionally, it features an **AI-based chatbot** that assists users by answering their queries about books, availability, and more.
 
@@ -21,29 +20,33 @@ A sophisticated **Library Management System** built using **Django**. This syste
 ---
 
 ## **Screenshots**
+These are some demo images. For more, check the images folder.
 
 ### Admin Dashboard
-![Admin Dashboard](https://via.placeholder.com/800x400?text=Admin+Dashboard)
+![Admin Dashboard](https://raw.githubusercontent.com/griffin-k/E-Library/refs/heads/main/Images/admin_charts.png)
 
 The admin dashboard provides an overview of key statistics, including total books, members, and staff. It also includes interactive charts for managing departmental data.
 
 ### Student Dashboard
-![Student Dashboard](https://via.placeholder.com/800x400?text=Student+Dashboard)
+![Student Dashboard](https://raw.githubusercontent.com/griffin-k/E-Library/refs/heads/main/Images/hero_section.png)
+![Student Dashboard](https://raw.githubusercontent.com/griffin-k/E-Library/refs/heads/main/Images/home_page.png)
+
 
 The student dashboard displays personal records, borrowed books, and allows users to interact with the AI chatbot for help.
 
 ### Departmental Distribution (Bar Chart)
-![Departmental Chart](https://via.placeholder.com/800x400?text=Departmental+Statistics+Chart)
+![Departmental Chart](https://raw.githubusercontent.com/griffin-k/E-Library/refs/heads/main/Images/admin.png)
 
 Interactive bar charts visualize the distribution of students, faculty, and staff across different departments, providing easy-to-read insights for admins.
 
 ### Recent Book Additions
-![Recent Book Additions](https://via.placeholder.com/800x400?text=Recent+Books)
+![Recent Book Additions](https://raw.githubusercontent.com/griffin-k/E-Library/refs/heads/main/Images/new_books.png)
+![Recent Book Additions](https://raw.githubusercontent.com/griffin-k/E-Library/refs/heads/main/Images/find_books.png)
 
 This section showcases the most recent books added to the system, ensuring that users are always informed of the latest updates.
 
 ### AI Chatbot Interaction
-![AI Chatbot](https://via.placeholder.com/800x400?text=AI+Chatbot+Interaction)
+![AI Chatbot](https://raw.githubusercontent.com/griffin-k/E-Library/refs/heads/main/Images/chat_bot.png)
 
 The AI chatbot helps users by answering questions about book availability, categories, and library policies.
 
@@ -68,7 +71,7 @@ The AI chatbot helps users by answering questions about book availability, categ
 To get started, clone the repository to your local machine:
 
 ```bash
-git clone https://github.com/yourusername/library-management-system.git
+git clone https://github.com/griffin-k/library-management-system.git
 cd library-management-system
 pip install -r requirements.txt
 python3  manage.py makemigrations
