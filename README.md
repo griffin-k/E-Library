@@ -131,6 +131,6 @@ This project is licensed under the **MIT License**. See the LICENSE file for mor
 
 ## **Contact**
 **Karimullah**  
-[Your Email Address] (karimullah.khan3637@gmail.com)
-[Your GitHub Profile](https://github.com/griffin-k)  
+[Email](karimullah.khan3637@gmail.com)
+[GITHUB](https://github.com/griffin-k)  
 
