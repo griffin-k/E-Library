@@ -55,20 +55,110 @@
         </table>
     </div>
 
+    <!-- Pagination -->
+    <div class="flex justify-center space-x-2 mt-6" id="pagination">
+        {% if members.has_previous %}
+        <button data-page="1" class="px-4 py-2 bg-gray-300 rounded-lg pagination-btn">First</button>
+        <button data-page="{{ members.previous_page_number }}" class="px-4 py-2 bg-gray-300 rounded-lg pagination-btn">Previous</button>
+        {% endif %}
+        <span id="pageInfo" class="px-4 py-2 bg-blue-500 text-white rounded-lg">Page {{ members.number }} of {{ members.paginator.num_pages }}</span>
+        {% if members.has_next %}
+        <button data-page="{{ members.next_page_number }}" class="px-4 py-2 bg-gray-300 rounded-lg pagination-btn">Next</button>
+        <button data-page="{{ members.paginator.num_pages }}" class="px-4 py-2 bg-gray-300 rounded-lg pagination-btn">Last</button>
+        {% endif %}
+    </div>
 </div>
 
 <script>
-document.getElementById("searchInput").addEventListener("input", function () {
-    let query = this.value;
-    let type = document.getElementById("typeFilter").value;
-    window.location.href = `?search=${query}&type=${type}`;
-});
+    // Debounce function
+    function debounce(func, wait) {
+        let timeout;
+        return function (...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(this, args), wait);
+        };
+    }
 
-document.getElementById("typeFilter").addEventListener("change", function () {
-    let type = this.value;
-    let query = document.getElementById("searchInput").value;
-    window.location.href = `?search=${query}&type=${type}`;
-});
+    // Fetch members via AJAX
+    function fetchMembers(query, type, page = 1) {
+        fetch("{% url 'librarian_app:search_members' %}?search=" + encodeURIComponent(query) + "&type=" + encodeURIComponent(type) + "&page=" + page)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok: ' + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                const tableBody = document.getElementById('memberTable');
+                tableBody.innerHTML = ''; // Clear existing rows
+
+                if (data.members.length > 0) {
+                    data.members.forEach(member => {
+                        const row = `
+                            <tr class="text-center bg-gray-50 hover:bg-gray-200 transition duration-200">
+                                <td class="p-3 border border-gray-400">${member.id}</td>
+                                <td class="p-3 border border-gray-400">${member.name}</td>
+                                <td class="p-3 border border-gray-400">${member.email}</td>
+                                <td class="p-3 border border-gray-400">${member.cell_no}</td>
+                                <td class="p-3 border border-gray-400">${member.department}</td>
+                                <td class="p-3 border border-gray-400 font-semibold">${member.type}</td>
+                            </tr>
+                        `;
+                        tableBody.innerHTML += row;
+                    });
+                } else {
+                    tableBody.innerHTML = `
+                        <tr>
+                            <td colspan="6" class="text-center p-4 bg-gray-100 text-gray-700">No members found.</td>
+                        </tr>
+                    `;
+                }
+
+                // Update pagination
+                const pagination = document.getElementById('pagination');
+                pagination.innerHTML = '';
+                if (data.has_previous) {
+                    pagination.innerHTML += `<button data-page="1" class="px-4 py-2 bg-gray-300 rounded-lg pagination-btn">First</button>`;
+                    pagination.innerHTML += `<button data-page="${data.previous_page_number}" class="px-4 py-2 bg-gray-300 rounded-lg pagination-btn">Previous</button>`;
+                }
+                pagination.innerHTML += `<span id="pageInfo" class="px-4 py-2 bg-blue-500 text-white rounded-lg">Page ${data.current_page} of ${data.total_pages}</span>`;
+                if (data.has_next) {
+                    pagination.innerHTML += `<button data-page="${data.next_page_number}" class="px-4 py-2 bg-gray-300 rounded-lg pagination-btn">Next</button>`;
+                    pagination.innerHTML += `<button data-page="${data.total_pages}" class="px-4 py-2 bg-gray-300 rounded-lg pagination-btn">Last</button>`;
+                }
+
+                document.querySelectorAll('.pagination-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const page = btn.getAttribute('data-page');
+                        fetchMembers(query, type, page);
+                    });
+                });
+            })
+            .catch(error => console.error('Error fetching members:', error));
+    }
+
+    // Event listeners with debouncing
+    const searchInput = document.getElementById('searchInput');
+    const typeFilter = document.getElementById('typeFilter');
+
+    const debouncedSearch = debounce(() => {
+        const query = searchInput.value;
+        const type = typeFilter.value;
+        fetchMembers(query, type);
+    }, 300); // 300ms delay
+
+    searchInput.addEventListener('input', debouncedSearch);
+    typeFilter.addEventListener('change', debouncedSearch);
+
+    // Initial pagination button listeners
+    document.querySelectorAll('.pagination-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const page = btn.getAttribute('data-page');
+            const query = searchInput.value;
+            const type = typeFilter.value;
+            fetchMembers(query, type, page);
+        });
+    });
 </script>
 
 {% endblock %}

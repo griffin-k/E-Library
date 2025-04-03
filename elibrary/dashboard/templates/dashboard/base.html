@@ -18,14 +18,16 @@
                 <a href="#" class="text-gray-700 hover:text-red-600 font-medium">Courses</a>
             </div>
 
-            <div class="hidden md:flex space-x-4">
-                {% if user.is_authenticated %}
-                    <span class="text-gray-700 font-medium">Hello, {{ user.username }}</span>
-            
+            <div class="hidden md:flex space-x-4 items-center">
+                {% if user %}
+                    <span class="text-gray-700 font-medium">Hello, {{ user.first_name }}</span>
                     {% if user.is_staff %}
-                        <a href="{% url 'librarian_dashboard' %}" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Admin Dashboard</a>
+                        <a href="{% url 'librarian_dashboard' %}" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Dashboard</a>
                     {% else %}
-                        <a href="{% url 'logout_view' %}" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">Logout</a>
+                        <form action="{% url 'logout' %}" method="post" class="inline">
+                            {% csrf_token %}
+                            <button type="submit" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">Logout</button>
+                        </form>
                     {% endif %}
                 {% else %}
                     <a href="{% url 'login' %}" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">Login</a>
@@ -45,28 +47,28 @@
             <a href="{% url 'student_page' %}" class="py-2 px-4 text-gray-700 hover:text-red-600">Students</a>
             <a href="#" class="py-2 px-4 text-gray-700 hover:text-red-600">Courses</a>
 
-            <div class="hidden md:flex space-x-4">
-                {% if user.is_authenticated %}
-                    <span class="text-gray-700 font-medium">Hello, {{ user.first_name }}</span>
-
-                    {% if user.is_staff %}
-                        <a href="{% url 'admin:index' %}" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Admin Dashboard</a>
-                    {% else %}
-                        <form action="{% url 'logout_view' %}" method="post" class="inline">
-                            {% csrf_token %}
-                            <button type="submit" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">Logout</button>
-                        </form>
-                    {% endif %}
+            {% if user %}
+                <span class="py-2 px-4 text-gray-700 font-medium">Hello, {{ user.first_name }}</span>
+                {% if user.is_staff %}
+                    <a href="{% url 'librarian_dashboard' %}" class="py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Dashboard</a>
                 {% else %}
-                    <a href="{% url 'login' %}" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">Login</a>
-                    <a href="{% url 'register' %}" class="px-4 py-2 border border-red-600 text-red-600 rounded-lg hover:bg-red-600 hover:text-white">Register</a>
+                    <form action="{% url 'logout' %}" method="post" class="py-2 px-4">
+                        {% csrf_token %}
+                        <button type="submit" class="w-full text-left px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">Logout</button>
+                    </form>
                 {% endif %}
-            </div>
+            {% else %}
+                <span class="py-2 px-4 text-gray-700 font-medium">Not logged in</span>
+                <a href="{% url 'login' %}" class="py-2 px-4 bg-red-600 text-white rounded-lg hover:bg-red-700">Login</a>
+                <a href="{% url 'register' %}" class="py-2 px-4 border border-red-600 text-red-600 rounded-lg hover:bg-red-600 hover:text-white">Register</a>
+            {% endif %}
         </div>
     </nav>
 
     <div class="container mx-auto mt-10 px-6">
-        {% block content %}{% endblock %}
+        {% block content %}
+            <p>This is the student page content.</p>
+        {% endblock %}
     </div>
 
     <script>

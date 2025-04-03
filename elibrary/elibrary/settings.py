@@ -6,26 +6,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY SETTINGS
 SECRET_KEY = 'django-insecure-nz$+e05uetnmuvg$1b3_!h10hiq%i603%5!6q*-@4&u^)i2uy+'
-
 DEBUG = True
-
 ALLOWED_HOSTS = []
 
-
-
-
+# MEDIA SETTINGS
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-
+MEDIA_ROOT = BASE_DIR / 'media'  # Directory where media files are stored
 
 # STATIC FILES CONFIGURATION
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",  # Using Path object correctly
 ]
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / "media"  # For user-uploaded files
 
 # APPLICATIONS
 INSTALLED_APPS = [
@@ -51,10 +43,18 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'django.contrib.sessions.middleware.SessionMiddleware',  # Required for authentication
+    'django.contrib.auth.middleware.AuthenticationMiddleware',  # Required for request.user
+    'django.contrib.messages.middleware.MessageMiddleware',
 ]
 
 # URLS & TEMPLATES
 ROOT_URLCONF = 'elibrary.urls'
+
+SESSION_COOKIE_SECURE = False  # False for HTTP in development
+SESSION_COOKIE_HTTPONLY = True
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 TEMPLATES = [
     {
@@ -67,6 +67,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
             ],
         },
     },
@@ -106,3 +107,6 @@ USE_TZ = True
 
 # DEFAULT PRIMARY KEY
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+BASE_DIR = Path(__file__).resolve().parent.parent

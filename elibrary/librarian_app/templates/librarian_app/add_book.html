@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function() {
     let accNoField = document.getElementById("accession_no");
 
     // ✅ Fetch the next available accession number from the backend
-    fetch("{% url 'get_next_accession_number' %}")
+    fetch("{% url 'librarian_app:get_next_accession_number' %}")
     .then(response => response.json())
     .then(data => {
         if (data.new_acc_no) {
@@ -108,7 +108,7 @@ document.getElementById("bookForm").addEventListener("submit", function(event) {
     
     let formData = new FormData(this);
 
-    fetch("{% url 'add_book' %}", {
+    fetch("{% url 'librarian_app:add_book' %}", {
         method: "POST",
         body: formData,
     })

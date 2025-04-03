@@ -1,13 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
-from .models import Student, Faculty
-import re
-from django.contrib.auth import login 
-from django.contrib.auth.hashers import check_password
-from django.contrib.auth import logout
-from django.contrib.auth.decorators import login_required
 from .models import Student, Faculty, Staff
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.hashers import check_password, make_password
+from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 
 
 
@@ -16,132 +14,133 @@ from .models import Student, Faculty, Staff
 
 def login_view(request):
     if request.method == "POST":
-        user_type = request.POST.get("user_type")
-        email = request.POST.get("email")
-        password = request.POST.get("password")
-        student_id = request.POST.get("student_id", None)
-        faculty_id = request.POST.get("faculty_id", None)
+        user_type = request.POST.get('user_type')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        user_id = request.POST.get('student_id') or request.POST.get('faculty_id') or request.POST.get('username')
 
         try:
-            user = None
-
-            if user_type == "student":
-                student = Student.objects.get(student_id=student_id)
-                user = student.user
-            elif user_type == "faculty":
-                faculty = Faculty.objects.get(teacher_id=faculty_id)
-                user = faculty.user
-            elif user_type == "staff":
-                user = User.objects.get(email=email)  # Staff login only needs email and password
+            if user_type == 'student':
+                user = Student.objects.get(student_id=user_id, email=email)
+            elif user_type == 'faculty':
+                user = Faculty.objects.get(faculty_id=user_id, email=email)
+            elif user_type == 'staff':
+                user = Staff.objects.get(staff_id=user_id, email=email)
             else:
-                messages.error(request, "Invalid user type.")
-                return redirect("login")
+                messages.error(request, "Invalid user type")
+                return render(request, 'auth_app/login.html')
 
-            if user and check_password(password, user.password):
-                login(request, user)
-                request.session["user_id"] = user.id
-                request.session["user_type"] = user_type
-                messages.success(request, "Login successful!")
-
-                if user_type == "student":
-                    return redirect("student_dashboard")
-                elif user_type == "faculty":
-                    return redirect("faculty_dashboard")
-                elif user_type == "staff":
-                    return redirect("librarian_dashboard")
-
+            if user.check_password(password):
+  
+                request.session['user_id'] = str(user.id)  
+                request.session['user_type'] = user_type
+                messages.success(request, f"Welcome, {user.first_name}")
+                
+                if user_type == 'staff':  # Admin
+                    return redirect('librarian_dashboard')
+                else:  # Student or Faculty
+                    return redirect('student_page')
             else:
-                messages.error(request, "Invalid credentials.")
-                return redirect("login")
+                messages.error(request, "Invalid password")
+        except (Student.DoesNotExist, Faculty.DoesNotExist, Staff.DoesNotExist):
+            messages.error(request, "Invalid ID or email")
 
-        except (Student.DoesNotExist, Faculty.DoesNotExist, User.DoesNotExist):
-            messages.error(request, "User not found.")
-        except User.MultipleObjectsReturned:
-            messages.error(request, "Multiple accounts found. Contact admin.")
-        except Exception as e:
-            messages.error(request, f"An error occurred: {str(e)}")
+    return render(request, 'auth_app/login.html')
 
-    return render(request, "auth_app/login.html")
+
+
+ 
+
 
 
 
 def register(request):
     if request.method == "POST":
-        user_type = request.POST.get("user_type", "").strip()
-        email = request.POST.get("email", "").strip()
-        password = request.POST.get("password", "")
+        try:
+            user_type = request.POST.get('user_type')
+            first_name = request.POST.get('first_name').capitalize()  
+            last_name = request.POST.get('last_name').capitalize()   
+            id_value = request.POST.get('id')
+            cell_no = request.POST.get('cell_no')
+            email = request.POST.get('email')
+            department = request.POST.get('department')
+            password = request.POST.get('password')
+            if not all([first_name, last_name, id_value, cell_no, email, department, password]):
+                messages.error(request, "All fields are required")
+                return render(request, "auth_app/register.html")
 
-        # Validation (Common for all users)
-        if not email.endswith("@gmail.com"):
-            messages.error(request, "Email must end with @gmail.com")
-            return redirect("register")
+            if user_type == "student":
+                if Student.objects.filter(student_id=id_value).exists():
+                    messages.error(request, "Student ID already exists")
+                    return render(request, "auth_app/register.html")
+                if Student.objects.filter(email=email).exists():
+                    messages.error(request, "Email already exists")
+                    return render(request, "auth_app/register.html")
+                
+                student = Student(
+                    first_name=first_name,
+                    last_name=last_name,
+                    student_id=id_value,
+                    cell_no=cell_no,
+                    email=email,
+                    department=department
+                )
+                student.set_password(password)
+                student.save()
+                messages.success(request, "Student registered successfully")
+                return redirect('login')
 
-        if len(password) < 6:
-            messages.error(request, "Password must be at least 6 characters long.")
-            return redirect("register")
+            elif user_type == "faculty":
+                if Faculty.objects.filter(faculty_id=id_value).exists():
+                    messages.error(request, "Faculty ID already exists")
+                    return render(request, "auth_app/register.html")
+                if Faculty.objects.filter(email=email).exists():
+                    messages.error(request, "Email already exists")
+                    return render(request, "auth_app/register.html")
+                
+                faculty = Faculty(
+                    first_name=first_name,
+                    last_name=last_name,
+                    faculty_id=id_value,
+                    cell_no=cell_no,
+                    email=email,
+                    department=department
+                )
+                faculty.set_password(password)
+                faculty.save()
+                messages.success(request, "Faculty registered successfully")
+                return redirect('login')
 
-        # Check if user already exists
-        if User.objects.filter(email=email).exists():
-            messages.error(request, "User with this email already exists.")
-            return redirect("register")
+            elif user_type == "staff":
+                if Staff.objects.filter(staff_id=id_value).exists():
+                    messages.error(request, "Staff ID already exists")
+                    return render(request, "auth_app/register.html")
+                if Staff.objects.filter(email=email).exists():
+                    messages.error(request, "Email already exists")
+                    return render(request, "auth_app/register.html")
+                
+                staff = Staff(
+                    first_name=first_name,
+                    last_name=last_name,
+                    staff_id=id_value,
+                    cell_no=cell_no,
+                    email=email,
+                    department=department
+                )
+                staff.set_password(password)
+                staff.save()
+                messages.success(request, "Staff registered successfully")
+                return redirect('login')
 
-        # Staff Registration (Only email & password required)
-        if user_type == "staff":
-            user = User.objects.create_user(username=email, email=email, password=password)
-            Staff.objects.create(user=user)
-            messages.success(request, "Staff registered successfully!")
-            return redirect("login")
+            else:
+                messages.error(request, "Invalid user type")
+                return render(request, "auth_app/register.html")
 
-        # Students and Faculty require additional details
-        first_name = request.POST.get("first_name", "").strip()
-        last_name = request.POST.get("last_name", "").strip()
-        cell_no = request.POST.get("cell_no", "").strip()
-        dept = request.POST.get("dept", "").strip()
-
-        if not first_name or not last_name:
-            messages.error(request, "First Name and Last Name are required.")
-            return redirect("register")
-
-        if not re.match(r'^[a-zA-Z]+$', first_name) or not re.match(r'^[a-zA-Z]+$', last_name):
-            messages.error(request, "First Name and Last Name should contain only alphabets.")
-            return redirect("register")
-
-        if not re.match(r'^\+?\d{10,15}$', cell_no):
-            messages.error(request, "Invalid phone number format.")
-            return redirect("register")
-
-        # Create user for students and faculty
-        user = User.objects.create_user(username=email, email=email, password=password, first_name=first_name, last_name=last_name)
-
-        if user_type == "student":
-            student_id = request.POST.get("student_id", "").strip()
-            if not student_id:
-                messages.error(request, "Student ID is required.")
-                return redirect("register")
-
-            Student.objects.create(user=user, student_id=student_id, cell_no=cell_no, department=dept)
-            messages.success(request, "Student registered successfully!")
-
-        elif user_type == "faculty":
-            teacher_id = request.POST.get("teacher_id", "").strip()
-            if not teacher_id:
-                messages.error(request, "Teacher ID is required.")
-                return redirect("register")
-
-            Faculty.objects.create(user=user, teacher_id=teacher_id, cell_no=cell_no, department=dept)
-            messages.success(request, "Faculty registered successfully!")
-
-        return redirect("login") 
+        except Exception as e:
+            messages.error(request, f"Registration failed: {str(e)}")
+            return render(request, "auth_app/register.html")
 
     return render(request, "auth_app/register.html")
-
-
-
-
-
-
-
-
 
 
 

@@ -8,101 +8,179 @@
 <div class="fixed top-20 left-80 right-5 bottom-5 overflow-y-auto bg-white p-6 rounded-lg shadow-lg border border-gray-200">
 
     <!-- Dashboard Cards -->
-  
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-center mb-10">
-            <!-- Total Books -->
-            <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
-                <img src="{% static 'images/books.png' %}" alt="Total Books" class="mx-auto mb-3 h-12 w-12">
-                <h3 class="text-lg font-semibold text-gray-700">Total Books</h3>
-                <p class="text-3xl font-bold text-gray-500">{{ total_books }}</p>
-            </div>
-        
-            <!-- Total Members -->
-            <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
-                <img src="{% static 'images/member.png' %}" alt="Members" class="mx-auto mb-3 h-12 w-12">
-                <h3 class="text-lg font-semibold text-gray-700">Members</h3>
-                <p class="text-3xl font-bold text-gray-500">{{ total_members }}</p>
-            </div>
-        
-            <!-- Total Faculty -->
-            <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
-                <img src="{% static 'images/faculty.png' %}" alt="Faculty" class="mx-auto mb-3 h-12 w-12">
-                <h3 class="text-lg font-semibold text-gray-700">Faculty</h3>
-                <p class="text-3xl font-bold text-gray-500">{{ total_faculty }}</p>
-            </div>
-
-        
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 text-center mb-10">
+        <!-- Total Books -->
         <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
-            <img src="{% static 'images/download.png' %}" alt="Downloads" class="mx-auto mb-3 h-12 w-12">
-            <h3 class="text-lg font-semibold text-gray-700">Downloads</h3>
-            <p class="text-3xl font-bold text-gray-500">678</p>
+            <img src="{% static 'images/books.png' %}" alt="Total Books" class="mx-auto mb-3 h-12 w-12">
+            <h3 class="text-lg font-semibold text-gray-700">Total Books</h3>
+            <p class="text-3xl font-bold text-gray-500">{{ total_books }}</p>
+        </div>
+    
+        <!-- Total Members -->
+        <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+            <img src="{% static 'images/member.png' %}" alt="Members" class="mx-auto mb-3 h-12 w-12">
+            <h3 class="text-lg font-semibold text-gray-700">Members</h3>
+            <p class="text-3xl font-bold text-gray-500">{{ total_members }}</p>
+        </div>
+    
+        <!-- Total Faculty -->
+        <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+            <img src="{% static 'images/faculty.png' %}" alt="Faculty" class="mx-auto mb-3 h-12 w-12">
+            <h3 class="text-lg font-semibold text-gray-700">Faculty</h3>
+            <p class="text-3xl font-bold text-gray-500">{{ total_faculty }}</p>
+        </div>
+
+        <!-- Total Staff -->
+        <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+            <img src="{% static 'images/faculty.png' %}" alt="Staff" class="mx-auto mb-3 h-12 w-12">
+            <h3 class="text-lg font-semibold text-gray-700">Total Staff</h3>
+            <p class="text-3xl font-bold text-gray-500">{{ total_staff }}</p>
         </div>
     </div>
 
     <!-- Charts Section -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Doughnut Chart -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
+        <!-- Doughnut Chart for Book Categories -->
         <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200 flex flex-col">
             <h3 class="text-lg font-semibold text-gray-700 mb-4 text-center">Book Categories</h3>
             <div class="flex-grow">
                 <canvas id="bookChart" class="w-full h-72"></canvas>
             </div>
         </div>
-        <!-- Bar Chart -->
+
+        
         <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200 flex flex-col">
-            <h3 class="text-lg font-semibold text-gray-700 mb-4 text-center">Download Books Progress</h3>
-            <div class="flex-grow">
-                <canvas id="issuedBooksChart" class="w-full h-72"></canvas>
+            <h3 class="text-lg font-semibold text-gray-700 mb-6 text-center">Recent Book Additions</h3>
+            
+            <div class="overflow-x-auto">
+                <table class="min-w-full table-auto text-sm text-left text-gray-700">
+                    <thead>
+                        <tr class="bg-gray-100 text-gray-600">
+                            <th class="px-6 py-3 font-semibold">Title</th>
+                            <th class="px-6 py-3 font-semibold">Publish Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for book in recent_books %}
+                            <tr class="border-b hover:bg-gray-50">
+                                <td class="px-6 py-4">{{ book.title }}</td>
+                                <td class="px-6 py-4">{{ book.publish_date|date:"M d, Y" }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
+        
+           <!-- Bar Chart for Students by Department -->
+           <div class="bg-white p-6 rounded-xl shadow-md border border-gray-200 flex flex-col h-full">
+            <h3 class="text-lg font-semibold text-gray-700 mb-4 text-center">Students by Department</h3>
+            <div class="flex-grow">
+                <canvas id="departmentChart" class="w-full h-full"></canvas>
+            </div>
+        </div>
+        
     </div>
 
 </div>
 
-<!-- Chart.js -->
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Doughnut Chart for Book Categories
-    const bookCtx = document.getElementById('bookChart').getContext('2d');
-    new Chart(bookCtx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Fiction', 'Science', 'History', 'Technology', 'Others'],
-            datasets: [{
-                data: [500, 300, 400, 350, 900],
-                backgroundColor: ['#1E3A8A', '#16A34A', '#EAB308', '#DC2626', '#6B7280'],
-                hoverOffset: 10
-            }]
-        },
-        options: {
-            maintainAspectRatio: false,
-            responsive: true
-        }
-    });
 
-    // Bar Chart for Issued Books
-    const issuedBooksCtx = document.getElementById('issuedBooksChart').getContext('2d');
-    new Chart(issuedBooksCtx, {
-        type: 'bar',
-        data: {
-            labels: ['January', 'February', 'March', 'April', 'May'],
-            datasets: [{
-                label: 'Issued Books',
-                data: [120, 150, 180, 200, 220],
-                backgroundColor: '#3B82F6'
-            }]
-        },
-        options: {
-            maintainAspectRatio: false,
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    max: 250
+    const bookCtx = document.getElementById('bookChart').getContext('2d');
+    
+    fetch('/librarian/fetch_book_categories/')
+        .then(response => response.json())
+        .then(data => {
+            const categories = data.categories;
+            const categoryLabels = categories.map(item => item.category);
+            const categoryCounts = categories.map(item => item.count);
+
+            new Chart(bookCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: categoryLabels,
+                    datasets: [{
+                        data: categoryCounts,
+                        backgroundColor: ['#1E3A8A', '#16A34A', '#EAB308', '#DC2626', '#6B7280'],
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    responsive: true
+                }
+            });
+        })
+        .catch(error => console.error('Error fetching categories:', error));
+
+
+    const departmentCtx = document.getElementById('departmentChart').getContext('2d');
+
+    
+    fetch('/librarian/fetch_students_by_department/')
+    .then(response => response.json())
+    .then(data => {
+        console.log('Fetched data:', data);  
+
+        const departments = Object.keys(data.departments);
+        const studentCounts = departments.map(department => data.departments[department].students);
+        const facultyCounts = departments.map(department => data.departments[department].faculty);
+        const staffCounts = departments.map(department => data.departments[department].staff);
+
+
+        console.log('Departments:', departments);
+        console.log('Student Counts:', studentCounts);
+        console.log('Faculty Counts:', facultyCounts);
+        console.log('Staff Counts:', staffCounts);
+
+        const departmentCtx = document.getElementById('departmentChart').getContext('2d');
+
+
+        new Chart(departmentCtx, {
+            type: 'bar',
+            data: {
+                labels: departments,
+                datasets: [
+                    {
+                        label: 'Students',
+                        data: studentCounts,
+                        backgroundColor: '#4CAF50',
+                        borderColor: '#388E3C',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Faculty',
+                        data: facultyCounts,
+                        backgroundColor: '#FF9800',
+                        borderColor: '#F57C00',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Staff',
+                        data: staffCounts,
+                        backgroundColor: '#2196F3',
+                        borderColor: '#1976D2',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
                 }
             }
-        }
-    });
+        });
+    })
+    .catch(error => console.error('Error fetching student data:', error));
+
+
+
+
 </script>
 
 {% endblock %}

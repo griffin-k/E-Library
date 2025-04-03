@@ -5,20 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </head>
 <body class="flex items-center justify-center min-h-screen bg-gray-100">
     
     <div class="w-full max-w-lg p-6 bg-white rounded-lg shadow-md">
         <h2 class="text-2xl font-semibold text-red-600 text-center mb-4">Login</h2>
-
-        <!-- Display error messages -->
-        {% if messages %}
-        <div class="mb-4">
-            {% for message in messages %}
-                <p class="text-center text-red-600">{{ message }}</p>
-            {% endfor %}
-        </div>
-        {% endif %}
 
         <!-- Toggle Buttons -->
         <div class="flex justify-center mb-6">
@@ -91,7 +84,22 @@
         </form>
     </div>
 
+
     <script>
+        {% if messages %}
+            {% for message in messages %}
+                Toastify({
+                    text: "{{ message }}",
+                    duration: 3000,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: {% if message.tags == 'success' %}"#10B981"{% else %}"#EF4444"{% endif %},
+                    stopOnFocus: true,
+                }).showToast();
+            {% endfor %}
+        {% endif %}
+
         const studentBtn = document.getElementById('studentBtn');
         const facultyBtn = document.getElementById('facultyBtn');
         const staffBtn = document.getElementById('staffBtn');

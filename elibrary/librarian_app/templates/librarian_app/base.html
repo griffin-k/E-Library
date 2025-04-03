@@ -37,25 +37,25 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{% url 'add_book' %}" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-700 transition">
+                        <a href="{% url 'librarian_app:add_book' %}" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-700 transition">
                             <i class="fa-solid fa-book text-white"></i>
                             <span class="ml-3">Add Books</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{% url 'show_members' %}" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-700 transition">
+                        <a href="{% url 'librarian_app:show_members'%}"  class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-700 transition">
                             <i class="fa-solid fa-users text-white"></i>
                             <span class="ml-3">Show Members</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{% url 'show_books' %}" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-700 transition">
+                        <a href="{% url 'librarian_app:show_books'%}"  class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-700 transition">
                             <i class="fa-solid fa-book text-white"></i>
                             <span class="ml-3">Show Books</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{% url 'setting' %}" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-700 transition">
+                        <a href="{% url 'librarian_app:setting'%}" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-700 transition">
                             <i class="fa-solid fa-cog text-white"></i>
                             <span class="ml-3">Settings</span>
                         </a>
@@ -73,13 +73,13 @@
                 
                     <hr class="h-1 bg-gray-300 rounded-full shadow-md border-none my-6">
                     <li>
-                        <a href="{% url 'logout_view' %}" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-700 transition">
+                        <a  href="{% url 'librarian_app:logout'%}"  class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-700 transition">
                             <i class="fa-solid fa-sign-out-alt text-white"></i>
                             <span class="ml-3">Logout</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{% url 'support_desk' %}" class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-700 transition">
+                        <a href="{% url 'librarian_app:support_desk'%}"   class="flex items-center px-4 py-3 rounded-lg hover:bg-gray-700 transition">
                             <i class="fa-solid fa-life-ring text-white"></i>
                             <span class="ml-3">Support Desk</span>
                         </a>
