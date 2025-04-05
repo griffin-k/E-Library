@@ -9,6 +9,10 @@ SECRET_KEY = 'django-insecure-nz$+e05uetnmuvg$1b3_!h10hiq%i603%5!6q*-@4&u^)i2uy+
 DEBUG = True
 ALLOWED_HOSTS = []
 
+
+
+
+
 # MEDIA SETTINGS
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'  # Directory where media files are stored
@@ -18,6 +22,14 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",  # Using Path object correctly
 ]
+
+
+
+# settings.py
+SESSION_COOKIE_AGE = 3600  # 1 hour session duration (default)
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True 
+
+
 
 # APPLICATIONS
 INSTALLED_APPS = [

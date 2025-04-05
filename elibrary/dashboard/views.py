@@ -11,7 +11,8 @@ from django.http import HttpResponse, Http404
 import os
 from django.shortcuts import get_object_or_404
 from django.conf import settings
-
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
 
 
 
@@ -35,6 +36,18 @@ def student_page(request):
 
 def newArivals(request):
     return render(request, "dashboard/newArivals.html")
+
+
+def about(request):
+        return render(request, "dashboard/about.html")
+
+
+
+def profile_view(request):
+    return render(request, 'dashboard/profile.html')
+
+
+
 
 
 def browse_books(request):
@@ -75,3 +88,8 @@ def download_book(request, book_id):
         response = HttpResponse(f.read(), content_type='application/pdf')
         response['Content-Disposition'] = f'attachment; filename="{book.title}.pdf"'
         return response
+    
+
+
+
+  

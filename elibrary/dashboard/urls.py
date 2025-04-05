@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
-from .views import student_page, newArivals, browse_books,download_book
+from .views import student_page, newArivals, browse_books,download_book,about,profile_view
 from auth_app.views import logout_view
 
 urlpatterns = [
@@ -9,6 +9,8 @@ urlpatterns = [
     path("newarivals/", newArivals, name="newarivals"),
     path('browse_books/', browse_books, name='browse_books'),
     path('logout/', logout_view, name="logout"),
+    path('aboutus/', about, name='aboutus'),
+    path('profile/', profile_view, name='profile'), 
     path('download_book/<int:book_id>/', download_book, name='download_book'),
 ] 
 if settings.DEBUG:

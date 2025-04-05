@@ -3,13 +3,12 @@
 {% block title %}E-Library - Browse Books{% endblock %}
 
 {% block content %}
-<div class="bg-white shadow-lg rounded-2xl p-8">
+<!-- Wrapper div contains login info in data-authenticated -->
+<div id="pageWrapper" data-authenticated="{% if request.session.user_id %}true{% else %}false{% endif %}" class="bg-white shadow-lg rounded-2xl p-8">
     <h2 class="text-3xl font-bold text-red-600 mb-6 text-center">📚 Browse Books</h2>
     <p class="text-gray-600 text-center mb-8">Find books by title, author, or category.</p>
 
-
     <div class="flex flex-col items-center space-y-4 mb-6">
-
         <input type="text" id="searchInput" placeholder="Search by title, author, or accession number..."
                class="p-3 border border-gray-400 rounded-lg shadow-sm w-full md:w-1/2 text-center" />
 
@@ -22,7 +21,6 @@
             {% endfor %}
         </select>
     </div>
-
 
     <div class="overflow-x-auto">
         <table class="w-full border-collapse border border-red-700 shadow-lg rounded-xl overflow-hidden">
@@ -38,18 +36,19 @@
                 </tr>
             </thead>
             <tbody id="bookList">
-             
+                <!-- Book rows inserted by JS -->
             </tbody>
         </table>
     </div>
 
-
     <div class="flex justify-center mt-6" id="paginationControls">
-
+        <!-- Pagination buttons -->
     </div>
 </div>
 
 <script>
+    const isAuthenticated = document.getElementById('pageWrapper').dataset.authenticated === 'true';
+
     const searchInput = document.getElementById('searchInput');
     const categoryFilter = document.getElementById('categoryFilter');
     const bookList = document.getElementById('bookList');
@@ -58,19 +57,20 @@
     function fetchBooks(page = 1) {
         const searchQuery = searchInput.value;
         const category = categoryFilter.value;
-
         const url = `/librarian/fetch_books/?search=${searchQuery}&category=${category}&page=${page}`;
 
         fetch(url)
             .then(response => response.json())
             .then(data => {
-           
                 bookList.innerHTML = '';
 
-     
                 data.books.forEach(book => {
                     const row = document.createElement('tr');
                     row.classList.add('text-center', 'hover:bg-gray-100', 'transition', 'duration-200');
+
+                    const downloadCell = isAuthenticated
+                        ? `<a href="${book.pdf_url}" class="bg-red-600 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 transition-all" target="_blank">Open Book</a>`
+                        : `<a href="{% url 'login' %}" class="text-gray-600 ">Login to Download</a>`;
 
                     row.innerHTML = `
                         <td class="p-4 border">${book.accession_number}</td>
@@ -79,29 +79,29 @@
                         <td class="p-4 border">${book.category}</td>
                         <td class="p-4 border">${book.edition}</td>
                         <td class="p-4 border">${book.publish_date}</td>
-                        <td class="p-4 border">
-                            <!-- Use the pdf_url directly here -->
-                            <a href="${book.pdf_url}" class="bg-red-600 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 transition-all" target="_blank">Open Book</a>
-                        </td>
+                        <td class="p-4 border">${downloadCell}</td>
                     `;
 
                     bookList.appendChild(row);
                 });
 
-           
                 paginationControls.innerHTML = `
-                    ${data.pagination.has_previous ? `<a href="#" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg" onclick="fetchBooks(1)">First</a><a href="#" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg" onclick="fetchBooks(${data.pagination.previous_page_number})">Previous</a>` : ''}
+                    ${data.pagination.has_previous ? `
+                        <a href="#" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg" onclick="fetchBooks(1)">First</a>
+                        <a href="#" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg" onclick="fetchBooks(${data.pagination.previous_page_number})">Previous</a>
+                    ` : ''}
                     <span class="px-4 py-2 bg-gray-800 text-white rounded-lg">Page ${data.pagination.current_page} of ${data.pagination.total_pages}</span>
-                    ${data.pagination.has_next ? `<a href="#" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg" onclick="fetchBooks(${data.pagination.next_page_number})">Next</a><a href="#" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg" onclick="fetchBooks(${data.pagination.total_pages})">Last</a>` : ''}
+                    ${data.pagination.has_next ? `
+                        <a href="#" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg" onclick="fetchBooks(${data.pagination.next_page_number})">Next</a>
+                        <a href="#" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg" onclick="fetchBooks(${data.pagination.total_pages})">Last</a>
+                    ` : ''}
                 `;
             })
             .catch(error => console.error('Error fetching books:', error));
     }
 
-
-    searchInput.addEventListener('input', () => fetchBooks(1));  
-    categoryFilter.addEventListener('change', () => fetchBooks(1));  
-
+    searchInput.addEventListener('input', () => fetchBooks(1));
+    categoryFilter.addEventListener('change', () => fetchBooks(1));
 
     fetchBooks();
 </script>
