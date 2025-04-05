@@ -1,0 +1,58 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}E-Library - Book Details{% endblock %}
+{% load static %}
+
+{% block content %}
+<div class="container mx-auto px-8 py-16">
+
+    <!-- Book Details Section -->
+    <div class="flex items-center justify-between bg-white rounded-xl shadow-2xl p-12 space-x-10">
+
+        <!-- Book Cover Image -->
+        <div class="w-1/3">
+            <img src="{% static 'images/2.jpg' %}" alt="Atomic Habits" class="w-full h-auto rounded-xl shadow-lg transition-transform duration-300 transform hover:scale-110">
+        </div>
+
+        <!-- Book Information -->
+        <div class="w-2/3">
+            <!-- Title -->
+            <h1 class="text-4xl font-bold text-gray-800 leading-tight tracking-tight mb-4 hover:text-red-600 transition-colors duration-300">Atomic Habits</h1>
+            
+            <!-- Author -->
+            <p class="text-lg text-gray-600">By <span class="font-semibold text-gray-800">James Clear</span></p>
+
+            <!-- Published & Genre -->
+            <p class="text-lg text-gray-600 mt-2">Published: <span class="font-semibold text-gray-800">October 2018</span></p>
+            <p class="text-lg text-gray-600">Genre: <span class="font-semibold text-gray-800">Self-help, Personal Development</span></p>
+
+            <!-- Book Summary -->
+            <div class="mt-8">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-3">Summary</h2>
+                <p class="text-gray-700 leading-relaxed text-lg mb-4 text-justify">
+                    "Atomic Habits" by James Clear focuses on the power of small, incremental changes in daily habits to achieve significant personal and professional transformations. Clear outlines a clear framework for building good habits, breaking bad ones, and mastering the tiny behaviors that lead to remarkable results over time.
+                </p>
+            </div>
+
+            <!-- Additional Details -->
+            <div class="mt-8">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-3">Important Details</h2>
+                <ul class="list-none pl-5 space-y-3 text-gray-700">
+                    <li>ISBN: <span class="font-medium text-gray-800">978-0735211292</span></li>
+                    <li>Pages: <span class="font-medium text-gray-800">320</span></li>
+                    <li>Language: <span class="font-medium text-gray-800">English</span></li>
+                    <li>Available: <span class="font-medium text-gray-800">Yes</span></li>
+                </ul>
+            </div>
+
+            <!-- Download Button (Only visible if user is logged in) -->
+            {% if request.session.user_id %}
+            <div class="mt-8">
+                <a href="{% static 'files/atomic_habits.pdf' %}" class="px-8 py-4 bg-red-600 text-white rounded-full font-semibold text-lg hover:bg-red-700 transition-all duration-300 shadow-md transform hover:scale-105">Download PDF</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+</div>  
+{% endblock %}

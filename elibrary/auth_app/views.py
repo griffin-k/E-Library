@@ -34,6 +34,12 @@ def login_view(request):
   
                 request.session['user_id'] = str(user.id)  
                 request.session['user_type'] = user_type
+                request.session['user_email'] = email
+                request.session['first_name'] = user.first_name 
+                request.session['last_name'] = user.last_name
+                request.session['department'] = user.department
+                request.session['cell_no'] = user.cell_no
+
                 messages.success(request, f"Welcome, {user.first_name}")
                 
                 if user_type == 'staff':  # Admin

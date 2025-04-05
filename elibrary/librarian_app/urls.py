@@ -5,7 +5,8 @@ from django.urls import path, include
 from librarian_app.views import (
     search_members, librarian_dashboard, add_member, add_book, add_book_form,
     get_next_accession_number, show_books, show_members, download_members_csv,
-    download_books_csv, settings_page, support_desk, support_submit,fetch_books,fetch_book_categories,fetch_students_by_department
+    download_books_csv, settings_page, support_desk, support_submit,fetch_books,
+    fetch_book_categories,fetch_students_by_department,add_books_from_pdfs
 )
 
 app_name = 'librarian_app'  
@@ -36,10 +37,18 @@ urlpatterns = [
 
 
 
+
+
+
     ###API 
     path('fetch_books/', fetch_books, name='fetch_books'),
       path('fetch_book_categories/', fetch_book_categories, name='fetch_book_categories'),
     path('fetch_students_by_department/', fetch_students_by_department, name='fetch_students_by_department'),
+
+
+
+
+    path('add-books/', add_books_from_pdfs, name='add_books'),
 ]
 
 if settings.DEBUG:

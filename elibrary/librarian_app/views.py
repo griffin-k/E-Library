@@ -11,6 +11,8 @@ from .models import Book
 from auth_app.models import Student, Faculty, Staff
 from django.db.models import Count
 import csv
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
 
 
 def librarian_dashboard(request):
@@ -202,6 +204,7 @@ def search_members(request):
 
 
 
+
 def settings_page(request):
     return render(request, "librarian_app/settings.html")
 
@@ -306,11 +309,17 @@ def show_books(request):
     #####Api
     #####################################
     
+from django.core.paginator import Paginator
+from django.http import JsonResponse
+from .models import Book
+
 def fetch_books(request):
     query = request.GET.get('search', '')  
     category_filter = request.GET.get('category', '') 
     page_number = int(request.GET.get('page', 1))  
+    
     books = Book.objects.all()
+
     if query:
         books = books.filter(
             title__icontains=query
@@ -322,10 +331,13 @@ def fetch_books(request):
 
     if category_filter:
         books = books.filter(category=category_filter)
+    
     paginator = Paginator(books, 10)  # 10 books per page
     page_obj = paginator.get_page(page_number)
+
     book_data = [
         {
+            'id': book.id,  # Include book ID
             'accession_number': book.accession_number,
             'title': book.title,
             'author': book.author,
@@ -407,3 +419,88 @@ def fetch_students_by_department(request):
             }
 
     return JsonResponse({'departments': departments_data})
+
+
+
+
+
+
+
+
+
+
+
+
+from django.http import JsonResponse
+from django.core.files import File
+import os
+import random
+import string
+from datetime import datetime
+from faker import Faker
+from .models import Book
+
+fake = Faker()
+
+# Path to the 'books_pdfs' folder
+books_pdf_folder = 'media/books_pdfs'
+
+def random_string(length=10):
+    """Generate a random string of letters and digits."""
+    return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
+
+def random_date():
+    """Generate a random date between 2000 and 2020."""
+    start_date = datetime(2000, 1, 1)
+    end_date = datetime(2020, 12, 31)
+    delta = end_date - start_date
+    return start_date + delta * random.random()
+
+def add_books_from_pdfs(request):
+    # Get all PDF files in the 'books_pdfs' folder
+    pdf_files = [f for f in os.listdir(books_pdf_folder) if f.endswith('.pdf')]
+    
+    if not pdf_files:
+        return JsonResponse({"success": False, "message": "No PDF files found."}, status=404)
+
+    books_added = []
+    
+    for pdf_file_name in pdf_files:
+        # Generate a random accession number for the book
+        last_book = Book.objects.order_by('-id').first()
+        new_acc_no = f"ACC{last_book.id + 1}" if last_book else "ACC1"
+
+        # Generate random data for the book fields
+        title = fake.sentence(nb_words=5).strip('.')
+        category = fake.word()
+        author = fake.name()
+        publisher = fake.company()
+        publish_date = random_date().date()
+        edition = f"Edition {random.randint(1, 5)}"
+        
+        # Read the PDF file
+        pdf_file_path = os.path.join(books_pdf_folder, pdf_file_name)
+        with open(pdf_file_path, 'rb') as pdf_file:
+            book_pdf = File(pdf_file)
+            
+            # Create the Book object and save it to the database
+            book = Book.objects.create(
+                accession_number=new_acc_no,
+                title=title,
+                category=category,
+                author=author,
+                publish_date=publish_date,
+                edition=edition,
+                pdf_file=book_pdf
+            )
+            
+            books_added.append({
+                "accession_number": new_acc_no,
+                "title": title
+            })
+    
+    return JsonResponse({
+        "success": True,
+        "message": f"{len(books_added)} books added successfully",
+        "books": books_added
+    })

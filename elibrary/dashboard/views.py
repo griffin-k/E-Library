@@ -13,6 +13,7 @@ from django.shortcuts import get_object_or_404
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
+from django.contrib import messages
 
 
 
@@ -43,11 +44,27 @@ def about(request):
 
 
 
+# def profile_view(request):
+#     return render(request, 'dashboard/profile.html')
+
+
+
+
 def profile_view(request):
-    return render(request, 'dashboard/profile.html')
+    if request.user.is_authenticated:
+        # Passing session data to the template
+        user_data = {
+            'first_name': request.session.get('first_name', ''),
+            'last_name': request.session.get('last_name', ''),
+            'email': request.session.get('user_email', ''),
+            'cell_no': request.session.get('cell_no', ''),
+            'department': request.session.get('department', ''),
+            'role': request.session.get('user_type', ''),  # Assuming 'user_type' indicates the role
+        }
+    else:
+        user_data = {}
 
-
-
+    return render(request, 'dashboard/profile.html', {'user_data': user_data})
 
 
 def browse_books(request):
@@ -92,4 +109,15 @@ def download_book(request, book_id):
 
 
 
-  
+ 
+def book_cover1(request):
+    return render(request, "dashboard/book_cover1.html")
+
+def book_cover2(request):
+    return render(request, "dashboard/book_cover2.html")
+
+def book_cover3(request):   
+    return render(request, "dashboard/book_cover3.html")
+
+
+

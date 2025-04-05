@@ -76,12 +76,12 @@
     <h1 class="text-white text-4xl font-bold animate-fadeIn">Welcome to Your E-Library</h1>
     <p class="text-white text-xl mt-2">Discover, Read, and Grow</p>
   </div>
-  <form action="#" method="GET" class="mt-12">
+  <form action="{% url 'browse_books' %}" method="GET" class="mt-12">
     <div class="mx-auto relative bg-white max-w-3xl flex items-center border py-2 px-3 rounded-full shadow-2xl">
       <input id="search-bar" name="search_text" placeholder="Search books, authors, or topics..." class="px-5 py-2 w-full rounded-full flex-1 outline-none border-none bg-transparent focus:ring-0" />
-      <button class="px-6 py-2 bg-red-600 text-white rounded-full hover:bg-red-800 transition-colors">Search</button>
+      <button type="submit" class="px-6 py-2 bg-red-600 text-white rounded-full hover:bg-red-800 transition-colors">Search</button>
     </div>
-  </form>
+</form>
 </div>
 
 <!-- Real-Time Book Updates Banner -->
@@ -156,28 +156,43 @@
 <div class="container mx-auto px-5 my-10">
   <h2 class="text-2xl font-bold mb-6 text-center">Trending Now</h2>
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-    <div class="book-card bg-white shadow-lg p-4">
-      <img src="{% static 'images/6.jpg' %}" alt="The Alchemist" class="rounded-lg mb-3">
-      <h3 class="font-semibold">The Alchemist</h3>
-      <p class="text-gray-600">Paulo Coelho</p>
-    </div>
-    <div class="book-card bg-white shadow-lg p-4">
-      <img src="{% static 'images/7.jpg' %}" alt="Becoming" class="rounded-lg mb-3">
-      <h3 class="font-semibold">Becoming</h3>
-      <p class="text-gray-600">Michelle Obama</p>
-    </div>
-    <div class="book-card bg-white shadow-lg p-4">
-      <img src="{% static 'images/8.jpg' %}" alt="Dune" class="rounded-lg mb-3">
-      <h3 class="font-semibold">Dune</h3>
-      <p class="text-gray-600">Frank Herbert</p>
-    </div>
-    <div class="book-card bg-white shadow-lg p-4">
-      <img src="{% static 'images/9.jpg' %}" alt="1984" class="rounded-lg mb-3">
-      <h3 class="font-semibold">1984</h3>
-      <p class="text-gray-600">George Orwell</p>
-    </div>
+    
+    <a href="{% url 'browse_books' %}">
+      <div class="book-card bg-white shadow-lg p-4 hover:shadow-xl transition-shadow">
+        <img src="{% static 'images/3.jpg' %}" alt="1984" class="rounded-lg mb-3">
+        <h3 class="font-semibold">To Kill a Mockingbird</h3>
+        <p class="text-gray-600">Harper Lee</p>
+      </div>
+    </a>
+
+    <a href="{% url 'browse_books' %}">
+      <div class="book-card bg-white shadow-lg p-4 hover:shadow-xl transition-shadow">
+        <img src="{% static 'images/5.jpg' %}" alt="1984" class="rounded-lg mb-3">
+        <h3 class="font-semibold">1984</h3>
+        <p class="text-gray-600">George Orwell</p>
+      </div>
+    </a>
+
+    
+    <a href="{% url 'browse_books' %}">
+      <div class="book-card bg-white shadow-lg p-4 hover:shadow-xl transition-shadow">
+        <img src="{% static 'images/4.jpg' %}" alt="1984" class="rounded-lg mb-3">
+        <h3 class="font-semibold">Pride and Prejudice </h3>
+        <p class="text-gray-600">Jane Austen</p>
+      </div>
+    </a>
+
+    <a href="{% url 'browse_books' %}">
+      <div class="book-card bg-white shadow-lg p-4 hover:shadow-xl transition-shadow">
+        <img src="{% static 'images/6.jpg' %}" alt="1984" class="rounded-lg mb-3">
+        <h3 class="font-semibold">The Great Gatsby</h3>
+        <p class="text-gray-600">F. Scott Fitzgerald</p>
+      </div>
+    </a>
+
   </div>
 </div>
+
 
 
 
@@ -187,26 +202,34 @@
 <div class="container mx-auto px-5 my-10">
   <h2 class="text-2xl font-bold mb-6 text-center">Recently Added</h2>
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-    <div class="book-card bg-white shadow-lg p-5">
+    
+    <!-- Book 1 -->
+    <a href="{% url 'book_cover1'  %}" class="book-card bg-white shadow-lg p-5 hover:shadow-2xl transition-shadow duration-300">
       <img src="{% static 'images/1.jpg' %}" alt="Deep Work" class="rounded-lg mb-3">
       <h3 class="font-semibold">Deep Work</h3>
       <p class="text-gray-600">Cal Newport</p>
       <p class="text-sm text-red-600">Added: Mar 08, 2025</p>
-    </div>
-    <div class="book-card bg-white shadow-lg p-5">
+    </a>
+    
+    <!-- Book 2 -->
+    <a href="{% url 'book_cover2' %}" class="book-card bg-white shadow-lg p-5 hover:shadow-2xl transition-shadow duration-300">
       <img src="{% static 'images/2.jpg' %}" alt="The 5 AM Club" class="rounded-lg mb-3">
       <h3 class="font-semibold">The 5 AM Club</h3>
       <p class="text-gray-600">Robin Sharma</p>
       <p class="text-sm text-red-600">Added: Mar 07, 2025</p>
-    </div>
-    <div class="book-card bg-white shadow-lg p-5">
+    </a>
+    
+    <!-- Book 3 -->
+    <a href="{% url 'book_cover3'  %}" class="book-card bg-white shadow-lg p-5 hover:shadow-2xl transition-shadow duration-300">
       <img src="{% static 'images/3.jpg' %}" alt="Educated" class="rounded-lg mb-3">
       <h3 class="font-semibold">Educated</h3>
       <p class="text-gray-600">Tara Westover</p>
       <p class="text-sm text-red-600">Added: Mar 06, 2025</p>
-    </div>
+    </a>
+    
   </div>
 </div>
+
 
 
 
